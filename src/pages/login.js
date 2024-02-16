@@ -29,6 +29,7 @@ export default function Home() {
   const router = useRouter()
   const dispatch = useDispatch()
   const handleLogin = async () => {
+    router.push("/DAHomePage")
     try {
       const response = await fetch(`http://localhost:8000/login`, {
         method: "POST",
@@ -44,7 +45,7 @@ export default function Home() {
           delay: 1000,
         })
         dispatch(updateLoggedInUser(username))
-        router.push("/LibraryHomePage")
+        router.push("/DAHomePage")
       } else {
         // Handle login error
         info({

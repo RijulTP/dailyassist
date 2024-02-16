@@ -13,6 +13,9 @@ import {
   faCircleArrowLeft,
   faCircleArrowRight,
   faHome,
+  faMagnifyingGlass,
+  faPersonWalking,
+  faPoll,
   faTable,
   faUser,
   faWrench,
@@ -50,27 +53,61 @@ export default function MainSidebar({ children }) {
           </MenuItem>
           <MenuItem
             icon={<FontAwesomeIcon icon={faHome} />}
-            onClick={() => router.push("/LibraryHomePage")}
+            onClick={() => router.push("/DAHomePage")}
           >
             {" "}
             Home
           </MenuItem>
           <MenuItem
-            icon={<FontAwesomeIcon icon={faTable} />}
-            onClick={() => router.push("/BookView")}
+            icon={<FontAwesomeIcon icon={faPoll} />}
+            onClick={() => router.push("/Survey")}
           >
             {" "}
-            View Library
+            Survey
           </MenuItem>
           <MenuItem
-            icon={<FontAwesomeIcon icon={faWrench} />}
-            onClick={() => router.push("/LibraryTools")}
+            icon={<FontAwesomeIcon icon={faMagnifyingGlass} />}
+            onClick={() => router.push("/Analysis")}
           >
             {" "}
-            Library tools
+            Your Analysis
           </MenuItem>
-          <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
-            {/* <MenuItem
+          <MenuItem
+            icon={<FontAwesomeIcon icon={faPersonWalking} />}
+            onClick={() => router.push("/HabitBuilder")}
+          >
+            {" "}
+            Habit Builder
+          </MenuItem>
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          {/* <MenuItem
               icon={<FontAwesomeIcon icon={faUser} />}
             >
               {loggedinuser}

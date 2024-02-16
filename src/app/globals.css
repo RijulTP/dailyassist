@@ -3,41 +3,46 @@
 @tailwind utilities;
 
 @font-face {
-  font-family: 'NexaFont';
-  src: url('/fonts/NexaTextDemo-Bold.woff2') format('woff2'),
-       url('/fonts/NexaTextDemo-Bold.woff') format('woff');
+  font-family: "NexaFont";
+  src: url("/fonts/NexaTextDemo-Bold.woff2") format("woff2"),
+    url("/fonts/NexaTextDemo-Bold.woff") format("woff");
   font-weight: bold;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'NexaFont';
-  src: url('/fonts/NexaTextDemo-Light.woff2') format('woff2'),
-       url('/fonts/NexaTextDemo-Light.woff') format('woff');
+  font-family: "NexaFont";
+  src: url("/fonts/NexaTextDemo-Light.woff2") format("woff2"),
+    url("/fonts/NexaTextDemo-Light.woff") format("woff");
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'Nunito';
-  src: url('/fonts/Nunito-Bold.woff2') format('woff2'),
-       url('/fonts/Nunito-Bold.woff') format('woff');
+  font-family: "Nunito";
+  src: url("/fonts/Nunito-Bold.woff2") format("woff2"),
+    url("/fonts/Nunito-Bold.woff") format("woff");
   font-weight: bold;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'Nunito';
-  src: url('/fonts/Nunito-Light.woff2') format('woff2'),
-       url('/fonts/Nunito-Light.woff') format('woff');
+  font-family: "Nunito";
+  src: url("/fonts/Nunito-Light.woff2") format("woff2"),
+    url("/fonts/Nunito-Light.woff") format("woff");
   font-weight: normal;
   font-style: normal;
 }
 
 body {
-  font-family: 'Nunito';
-  background: url('/Backdrop.jpg');
+  font-family: "Nunito";
+  background: url("/Backdrop.jpg");
   background-size: cover;
+  background-color: rgba(
+    0,
+    0,
+    0
+  ); /* Adjust the last value (0.5) for desired darkness */
 }
 /* :root {
   --foreground-rgb: 0, 0, 0;
@@ -54,11 +59,11 @@ body {
 } */
 /* body {
   /* color: rgb(var(--foreground-rgb)); */
-  /* Add the backdrop image as the background */
-  /* background: url('/Backdrop.jpg') */
-  /* You can customize background-size and other properties as needed */
+/* Add the backdrop image as the background */
+/* background: url('/Backdrop.jpg') */
+/* You can customize background-size and other properties as needed */
 /* }  */
- /* body {
+/* body {
   color: rgb(var(--foreground-rgb));
   background: linear-gradient(
       to bottom,
