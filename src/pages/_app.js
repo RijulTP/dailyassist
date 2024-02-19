@@ -18,7 +18,7 @@ export default function MyApp({ Component, pageProps }) {
     if (router.asPath === "/" || router.asPath === "/index.html") {
       setSidebarVisible(false)
       router.push("/login")
-    } else if (router.asPath === "/login") {
+    } else if (router.asPath === "/login" || isMobile) {
       setSidebarVisible(false)
     } else {
       setSidebarVisible(true)

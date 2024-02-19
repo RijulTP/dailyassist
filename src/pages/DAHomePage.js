@@ -4,8 +4,16 @@
 // Import necessary modules
 import React, { useState, useEffect } from "react"
 import MotivationalQuote from "./MotivationalQuote"
-import Chatbot from "./Chatbot"
+import Chatbot from "../components/Chatbot"
 import TaskManager from "./TaskManager"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import {
+  faPoll,
+  faMagnifyingGlass,
+  faPersonWalking,
+  faRobot,
+} from "@fortawesome/free-solid-svg-icons"
+import Link from "next/link"
 const DAHomePage = () => {
   const [isChatbotOpen, setIsChatbotOpen] = useState(false)
   const [showWelcomeMessage, setShowWelcomeMessage] = useState(false)
@@ -38,15 +46,45 @@ const DAHomePage = () => {
           </div>
           {/* Rest of the stuff */}
           <TaskManager />
-          <div className="fixed bottom-8 right-8">
-            <button
-              onClick={() => setIsChatbotOpen(!isChatbotOpen)}
-              className="bg-blue-500 text-white px-4 py-2 rounded-md shadow-md hover:bg-blue-600 focus:outline-none"
+
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-8">
+            <Link
+              className="w-25 flex items-center justify-center p-4 rounded-md border border-gray-300 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
+              href={{
+                pathname: "/SurveyStart",
+              }}
             >
-              Chat
-            </button>
+              <FontAwesomeIcon icon={faPoll} class="w-10 mr-2" />
+              <span>Survey</span>
+            </Link>
+            <Link
+              className="flex items-center justify-center p-4 rounded-md border border-gray-300 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
+              href={{
+                pathname: "/Analysis",
+              }}
+            >
+              <FontAwesomeIcon icon={faMagnifyingGlass} class="w-10 mr-2" />
+              <span>Your Analysis</span>
+            </Link>
+            <Link
+              className="flex items-center justify-center p-4 rounded-md border border-gray-300 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
+              href={{
+                pathname: "/HabitBuilder",
+              }}
+            >
+              <FontAwesomeIcon icon={faPersonWalking} class="w-10 mr-2" />
+              <span>Habit Builder</span>
+            </Link>
+            <Link
+              className="flex items-center justify-center p-4 rounded-md border border-gray-300 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200"
+              href={{
+                pathname: "/DailyAssistBot",
+              }}
+            >
+              <FontAwesomeIcon icon={faRobot} class="w-10 mr-2" />
+              <span>Daily Assist Bot</span>
+            </Link>
           </div>
-          {isChatbotOpen && <Chatbot />}
         </div>
       </div>
     </div>

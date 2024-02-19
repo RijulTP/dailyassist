@@ -16,6 +16,7 @@ import {
   faMagnifyingGlass,
   faPersonWalking,
   faPoll,
+  faRobot,
   faTable,
   faUser,
   faWrench,
@@ -78,6 +79,13 @@ export default function MainSidebar({ children }) {
           >
             {" "}
             Habit Builder
+          </MenuItem>
+          <MenuItem
+            icon={<FontAwesomeIcon icon={faRobot} />}
+            onClick={() => router.push("/DailyAssistBot")}
+          >
+            {" "}
+            Daily Assist Bot
           </MenuItem>
           <br />
           <br />
