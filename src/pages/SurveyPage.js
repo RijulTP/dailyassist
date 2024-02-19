@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import SurveyQuestion from "./SurveyQuestion"
-import StickyTopBar from "./StickyTopBar"
+import StickyTopBar from "../components/StickyTopBar"
 import { useSelector, useDispatch } from "react-redux"
 
 const REQUIRED = "*required"

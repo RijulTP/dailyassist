@@ -1,7 +1,7 @@
 "use client"
 import React, { useState } from "react"
 
-export const TaskManager = () => {
+export default function TaskManager() {
   const [tasks, setTasks] = useState([])
   const [newTask, setNewTask] = useState("")
 

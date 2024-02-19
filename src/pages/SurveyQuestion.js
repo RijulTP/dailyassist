@@ -1,7 +1,7 @@
 import React from "react"
-import RadioButton from "./RadioButton"
-import Rating from "./Rating"
-import Descriptive from "./descriptive"
+import RadioButton from "../components/RadioButton"
+import Rating from "../components/Rating"
+import Descriptive from "../components/descriptive"
 
 const WORDLIMIT = 140
 

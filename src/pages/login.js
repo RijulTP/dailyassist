@@ -4,19 +4,19 @@ import { useRouter } from "next/navigation"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons"
 
-import {
-  alert,
-  notice,
-  info,
-  success,
-  error,
-  defaultModules,
-} from "@pnotify/core"
-import "@pnotify/core/dist/PNotify.css"
-import * as PNotifyMobile from "@pnotify/mobile"
-import "@pnotify/mobile/dist/PNotifyMobile.css"
-import "@pnotify/core/dist/BrightTheme.css"
-defaultModules.set(PNotifyMobile, {})
+// import {
+//   alert,
+//   notice,
+//   info,
+//   success,
+//   error,
+//   defaultModules,
+// } from "@pnotify/core"
+// import "@pnotify/core/dist/PNotify.css"
+// import * as PNotifyMobile from "@pnotify/mobile"
+// import "@pnotify/mobile/dist/PNotifyMobile.css"
+// import "@pnotify/core/dist/BrightTheme.css"
+// defaultModules.set(PNotifyMobile, {})
 
 import { useDispatch } from "react-redux"
 
@@ -40,18 +40,18 @@ export default function Home() {
       })
 
       if (response.ok) {
-        success({
-          text: "Login successful",
-          delay: 1000,
-        })
+        // success({
+        //   text: "Login successful",
+        //   delay: 1000,
+        // })
         dispatch(updateLoggedInUser(username))
         router.push("/DAHomePage")
       } else {
         // Handle login error
-        info({
-          text: "Login Failed",
-          delay: 1000,
-        })
+        // info({
+        //   text: "Login Failed",
+        //   delay: 1000,
+        // })
         console.log("Invalid login information")
         //setAlert({ type: "failed", message: "Login Failed" })
       }

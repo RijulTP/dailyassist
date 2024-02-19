@@ -5,8 +5,7 @@
 import React, { useState, useEffect } from "react"
 import MotivationalQuote from "./MotivationalQuote"
 import Chatbot from "./Chatbot"
-import { TaskManager } from "./TaskManager"
-
+import TaskManager from "./TaskManager"
 const DAHomePage = () => {
   const [isChatbotOpen, setIsChatbotOpen] = useState(false)
   const [showWelcomeMessage, setShowWelcomeMessage] = useState(false)
