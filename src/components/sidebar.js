@@ -60,7 +60,7 @@ export default function MainSidebar({ children }) {
           </MenuItem>
           <MenuItem
             icon={<FontAwesomeIcon icon={faPoll} />}
-            onClick={() => router.push("/Survey")}
+            onClick={() => router.push("/SurveyStart")}
           >
             {" "}
             Survey

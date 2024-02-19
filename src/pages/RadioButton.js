@@ -1,10 +1,4 @@
-import React, { useState, useEffect } from "react"
-import { View, Text, Pressable } from "react"
-// import styles from 'pages/Survey/surveystyles'
-// import { setSurveyAnswer, setComponentIncentive } from 'slices/app.slice'
-import { useSelector, useDispatch } from "react-redux"
-
-const NO_POINTS = 0
+import React, { useState } from "react"
 
 export default function RadioButton({
   radioButtons,
@@ -14,38 +8,16 @@ export default function RadioButton({
   qNum,
   points,
 }) {
-  const dispatch = useDispatch()
   const [selectedOption, setOption] = useState(null)
-  const currentAnswer = useSelector((state) => {
-    if (state.app.surveyAnswers[surveyId]) {
-      if (state.app.surveyAnswers[surveyId][qNum])
-        return state.app.surveyAnswers[surveyId][qNum]["user_answer"]["answer"]
-    }
-  })
 
-  useEffect(() => {
-    if (currentAnswer) {
-      // dispatch(setComponentIncentive({ surveyQid: qNum, pointStatus: points }))
-    }
-    setOption(currentAnswer)
-  }, [])
-
-  function optionSelect(newlySelected, surveyQid, answerElement) {
-    dispatch(
-      setSurveyAnswer({
-        surveyQid: surveyQid,
-        answerElement: answerElement,
-        surveyId: surveyId,
-      })
-    )
+  function optionSelect(newlySelected) {
     setOption(newlySelected)
-    // dispatch(setComponentIncentive({ surveyQid: qNum, pointStatus: points }))
+    // Dispatch relevant actions
   }
 
-  function optionDeselect(surveyQid) {
-    // dispatch(setSurveyAnswer({ surveyQid: surveyQid, surveyId: surveyId }))
+  function optionDeselect() {
+    // Dispatch relevant actions
     setOption(null)
-    // dispatch(setComponentIncentive({ surveyQid: qNum, pointStatus: NO_POINTS }))
   }
 
   const selectHandler = (newlySelected) => {
@@ -54,36 +26,27 @@ export default function RadioButton({
       surveyId: surveyId,
       user_answer: { type: qType, answer: newlySelected },
     }
-    if (selectedOption === newlySelected) optionDeselect(qNum)
-    else optionSelect(newlySelected, qNum, answerElement)
+    if (selectedOption === newlySelected) optionDeselect()
+    else optionSelect(newlySelected)
   }
 
   return (
-    <View style={styles.radioButtons}>
-      {radioButtons.map((item) => {
-        let keyToBeAdded = "uniqueKey" + item.value
-        return (
-          <Pressable
-            style={
-              item.value === currentAnswer ? styles.selected : styles.unSelected
-            }
-            onPress={() => {
-              selectHandler(item.value)
-            }}
-            key={keyToBeAdded}
+    <>
+      <div className="flex flex-col gap-4">
+        {radioButtons.map((item) => (
+          <button
+            className={`w-48 px-6 py-3 rounded-lg focus:outline-none ${
+              selectedOption === item.value
+                ? "bg-blue-500 text-white"
+                : "bg-gray-200 text-gray-800 hover:bg-gray-300"
+            }`}
+            onClick={() => selectHandler(item.value)}
+            key={item.value}
           >
-            <Text
-              style={[
-                styles.setFontSizeTwo,
-                { fontWeight: "bold" },
-                styles.option,
-              ]}
-            >
-              {item.value}
-            </Text>
-          </Pressable>
-        )
-      })}
-    </View>
+            <span className="font-bold">{item.value}</span>
+          </button>
+        ))}
+      </div>
+    </>
   )
 }

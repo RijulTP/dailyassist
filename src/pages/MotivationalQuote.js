@@ -76,12 +76,26 @@ const MotivationalQuote = () => {
   }, []) // Empty dependency array ensures the effect runs only once
 
   // Render the quote component
+  const [animatedText, setAnimatedText] = useState("")
+
+  useEffect(() => {
+    const textAnimationInterval = setInterval(() => {
+      if (animatedText.length < quote.quote.length) {
+        setAnimatedText(quote.quote.substring(0, animatedText.length + 1))
+      } else {
+        clearInterval(textAnimationInterval)
+      }
+    }, 20) // Adjust the timing as needed
+
+    return () => clearInterval(textAnimationInterval)
+  }, [animatedText, quote.quote])
+
   return (
     <div className="my-8 flex flex-col items-center">
       <blockquote className="italic text-lg text-black-600 bg-purple-100 rounded-lg p-4 shadow-md">
-        "{quote.quote}"
+        "{animatedText}"
       </blockquote>
-      <p className="text-md font-bold text-white mt-2">- {quote.author}</p>
+      <p className="text-md font-bold mt-2">- {quote.author}</p>
     </div>
   )
 }

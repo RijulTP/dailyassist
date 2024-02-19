@@ -1,8 +1,5 @@
-import React, { useEffect, useState } from 'react'
-import { StyleSheet, View, Text, Pressable } from 'react'
-// import styles from 'pages/Survey/surveystyles'
-// import { setSurveyAnswer, setComponentIncentive } from 'slices/app.slice'
-import { useSelector, useDispatch } from 'react-redux'
+import React, { useEffect, useState } from "react"
+import { useSelector, useDispatch } from "react-redux"
 
 const DIAMETER_NUM1 = 50
 const DIAMETER_NUM2 = 5.5
@@ -13,127 +10,79 @@ const DEFAULT_NUM = 5
 
 const NO_POINTS = 0
 
-
-export default function Rating({ choiceNo, surveyQid, qType, surveyId, qNum, points }) {
+export default function Rating({
+  choiceNo,
+  surveyQid,
+  qType,
+  surveyId,
+  qNum,
+  points,
+}) {
   const dispatch = useDispatch()
   const [selectedOption, setOption] = useState(null)
   const [ratingOps, setRatingOps] = useState([])
   const [diameter, setDiameter] = useState(0)
   const [txtSize, setTxtSize] = useState(0)
-  const currentAnswer = useSelector((state) => {
-    if (state.app.surveyAnswers[surveyId] && state.app.surveyAnswers[surveyId][qNum] ) {
-        return state.app.surveyAnswers[surveyId][qNum]['user_answer']['answer']
-    }
-  })
-  
+  // const currentAnswer = useSelector((state) => state.app.surveyAnswers[surveyId]?.[qNum]?.user_answer?.answer);
+
   useEffect(() => {
-    var newRatingOps = []
-    for (let i = 1; i <= choiceNo; i++) {
-      newRatingOps.push(i)
-    }
+    const newRatingOps = Array.from(
+      { length: choiceNo },
+      (_, index) => index + 1
+    )
+    console.log("New rating ops are", newRatingOps)
     setRatingOps(newRatingOps)
 
-    var newDiameter = DIAMETER_NUM1 - DIAMETER_NUM2 * (choiceNo - DEFAULT_NUM)
-    var newTxtSize = TXTSIZE_NUM1 - TXTSIZE_NUM2 * (choiceNo - DEFAULT_NUM)
+    const newDiameter = DIAMETER_NUM1 - DIAMETER_NUM2 * (choiceNo - DEFAULT_NUM)
+    const newTxtSize = TXTSIZE_NUM1 - TXTSIZE_NUM2 * (choiceNo - DEFAULT_NUM)
     setDiameter(newDiameter)
     setTxtSize(newTxtSize)
-  }, [])
+  }, [choiceNo])
 
-  useEffect(() => {
-    if (currentAnswer) {
-      // dispatch(
-      //   setComponentIncentive({ surveyQid: qNum, pointStatus: points }),
-      // )
-    }
-    setOption(currentAnswer)
-  }, [])
+  // useEffect(() => {
+  //   if (currentAnswer) {
+  //     // Dispatch relevant actions
+  //   }
+  //   setOption(currentAnswer);
+  // }, [currentAnswer]);
 
-
-  function optionSelect(newlySelected, surveyQid, answerElement) {
+  function optionSelect(newlySelected) {
+    console.log("Option select", newlySelected)
     setOption(newlySelected)
-    // dispatch(
-    //   setSurveyAnswer({
-    //     surveyQid: qNum,
-    //     answerElement: answerElement,
-    //     surveyId: surveyId,
-    //   }),
-    // )
-    // dispatch(
-    //   setComponentIncentive({ surveyQid: qNum, pointStatus: points }),
-    // )
+    // Dispatch relevant actions
   }
 
-  function optionDeselect(surveyQid) {
-    // dispatch(setSurveyAnswer({ surveyQid: qNum, surveyId: surveyId }))
+  function optionDeselect() {
     setOption(null)
-    // dispatch(
-    //   setComponentIncentive({ surveyQid: qNum, pointStatus: NO_POINTS }),
-    // )
+    // Dispatch relevant actions
   }
 
   const selectHandler = (newlySelected) => {
-    const selectedQs = newlySelected
-    const answerElement = {
-      survey_question_id: surveyQid,
-      surveyId: surveyId,
-      user_answer: { type: qType, answer: newlySelected },
+    if (selectedOption === newlySelected) {
+      optionDeselect()
+    } else {
+      optionSelect(newlySelected)
+      // Dispatch relevant actions
     }
-
-    if (selectedOption === newlySelected) optionDeselect(surveyQid)
-    else optionSelect(newlySelected, surveyQid, answerElement)
   }
 
-
   return (
-    <View style={containerStyle.rowContainer}>
-      {ratingOps.map((item) => {
-        var keyToBeAdded = 'uniqueKey' + item
-        return (
-          <Pressable
-            style={
-              item === currentAnswer
-                ? [styles.ratingSelected, { width: diameter, height: diameter }]
-                : [
-                    styles.ratingUnSelected,
-                    { width: diameter, height: diameter },
-                  ]
-            }
-            onPress={() => selectHandler(item)}
-            key={keyToBeAdded}
-          >
-            <Text
-              style={[
-                styles.setFontSizeTwo,
-                {
-                  fontWeight: 'bold',
-                  fontSize: txtSize,
-                  width: diameter,
-                  textAlignVertical: 'center',
-                  textAlign: 'center',
-                },
-                styles.ratingOption,
-              ]}
-            >
-              {item}
-            </Text>
-          </Pressable>
-        )
-      })}
-    </View>
+    <div className="flex flex-row items-center  space-x-4">
+      {ratingOps.map((item) => (
+        <button
+          className={`w-${diameter} h-${diameter} rounded-full flex items-center justify-center focus:outline-none ${
+            selectedOption === item
+              ? "bg-green-500 text-white"
+              : "bg-red-500 text-white"
+          }`}
+          onClick={() => selectHandler(item)}
+          key={item}
+        >
+          <span className={` w-10 font-bold text-lg text-center h-${diameter}`}>
+            {item}
+          </span>
+        </button>
+      ))}
+    </div>
   )
-}
-
-
-const containerStyle = {
-  container: {
-    padding: 8,
-    backgroundColor: '#ffffff',
-  },
-  rowContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginLeft: 3,
-    marginBottom: 25,
-  },
 }

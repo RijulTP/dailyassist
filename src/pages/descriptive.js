@@ -1,9 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { View, Text, TextInput } from "react"
-import styles from "./surveystyles"
-// import { setComponentIncentive, setSurveyAnswer } from 'slices/app.slice'
-import { useSelector, useDispatch } from "react-redux"
-import { removeSurveyAnswer } from "./surveyutils/utils"
+import { useDispatch } from "react-redux"
 
 const NO_POINTS = 0
 const MIN_INCENTIVE_LEN = 10
@@ -18,83 +14,39 @@ export default function Descriptive({
 }) {
   const [answer, setAnswer] = useState("")
   const dispatch = useDispatch()
-  const { surveyAnswers } = useSelector((state) => state.app)
-  const currentAnswer = useSelector((state) => {
-    if (
-      state.app.surveyAnswers[surveyId] &&
-      state.app.surveyAnswers[surveyId][qNum]
-    ) {
-      return state.app.surveyAnswers[surveyId][qNum]["user_answer"]["answer"]
-    }
-  })
-
-  const answerElement = {
-    survey_question_id: surveyQid,
-    surveyId: surveyId,
-    user_answer: { type: qType, answer: answer },
-  }
-  var answers = JSON.parse(JSON.stringify(surveyAnswers))
-
-  useEffect(() => {
-    if (currentAnswer) {
-      setAnswer(currentAnswer)
-      if (currentAnswer.length >= MIN_INCENTIVE_LEN) {
-        dispatch(
-          setComponentIncentive({ surveyQid: qNum, pointStatus: points })
-        )
-      }
-    }
-  }, [])
 
   useEffect(() => {
     checkAnswer()
   }, [answer])
 
   function checkAnswer() {
-    answers = removeSurveyAnswer(answers, surveyQid)
-    if (answer != "") {
-      let finalPoints = answer.length >= MIN_INCENTIVE_LEN ? points : NO_POINTS
-      // dispatch(
-      //   setComponentIncentive({
-      //     surveyQid: qNum,
-      //     pointStatus: finalPoints,
-      //   }),
-      // )
-      // dispatch(
-      //   setSurveyAnswer({
-      //     surveyQid: qNum,
-      //     answerElement: answerElement,
-      //     surveyId: surveyId,
-      //   }),
-      // )
-    } else {
-      dispatch(setSurveyAnswer({ surveyQid: qNum, surveyId: surveyId }))
-      dispatch(
-        setComponentIncentive({ surveyQid: qNum, pointStatus: NO_POINTS })
-      )
+    let finalPoints = NO_POINTS
+    if (answer.length >= MIN_INCENTIVE_LEN) {
+      finalPoints = points
     }
+    // Dispatch relevant actions
+  }
+
+  const handleChange = (e) => {
+    const text = e.target.value
+    setAnswer(text)
   }
 
   return (
-    <View>
-      <View style={styles.descriptiveContainer}>
-        <View>
-          <TextInput
-            placeholder="Enter your answer"
-            multiline
-            maxLength={wordLimit}
-            autoCorrect={true}
-            spellCheck={true}
-            autoCapitalize="sentences"
-            style={{ margin: 10 }}
-            onChangeText={(text) => setAnswer(text)}
-            value={answer}
-          />
-        </View>
-      </View>
-      <Text style={[styles.answerLimit, { fontSize: 10, fontWeight: "bold" }]}>
-        {wordLimit - answer.length}
-      </Text>
-    </View>
+    <div>
+      <div className="descriptiveContainer rounded-lg p-4 mb-4">
+        <textarea
+          placeholder="Enter your answer"
+          rows={4}
+          maxLength={wordLimit}
+          value={answer}
+          onChange={handleChange}
+          className="w-full h-full resize-none focus:outline-none text-black" // Add text-black class here
+        />
+      </div>
+      <span className="block text-sm font-bold mb-2">
+        {wordLimit - answer.length} characters remaining
+      </span>
+    </div>
   )
 }

@@ -44,11 +44,7 @@ export const TaskManager = () => {
       <ul>
         {tasks.map((task) => (
           <li key={task.id} className="flex items-center justify-between py-2">
-            <span
-              className={`flex-1 text-white ${
-                task.completed ? "line-through" : ""
-              }`}
-            >
+            <span className={`flex-1  ${task.completed ? "line-through" : ""}`}>
               {task.title}
             </span>
             <div>
