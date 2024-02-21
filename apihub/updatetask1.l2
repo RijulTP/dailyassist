@@ -1,0 +1,9 @@
+POST
+http://127.0.0.1:8000/dailyassist/updatetask/
+
+{
+
+    "task_id": 2,
+    "task_name": "Sample Task",
+    "task_status": "Complete"
+}
