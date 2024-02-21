@@ -13,6 +13,36 @@ from django.http import HttpResponse
 from django.db import connection
 
 
+
+def get_task_set_id(date_of_task, user_id):
+    with connection.cursor() as cursor:
+        cursor.execute("""
+            SELECT task_set_id 
+            FROM task_set 
+            WHERE date_of_task = %s AND user_id = %s
+        """, [date_of_task, user_id])
+        task_set_id = cursor.fetchone()
+
+        return task_set_id[0] if task_set_id else None
+    
+
+
+def get_task_set_id_api(request):
+    try:
+        data = json.loads(request.body)
+        date_of_task = data.get('date_of_task')
+        user_id = data.get('user_id')
+
+        if not (date_of_task and user_id):
+            return HttpResponse("Date of task and user ID must be provided in the request body.", status=400)
+
+        task_set_id = get_task_set_id(date_of_task, user_id)
+
+        return HttpResponse(json.dumps({"task_set_id": task_set_id}), content_type="application/json")
+
+    except Exception as e:
+        return HttpResponse(f"An error occurred: {str(e)}", status=500)
+
 def store_tasks(request):
     try:
         data = json.loads(request.body)
@@ -24,17 +54,11 @@ def store_tasks(request):
         if not (date_of_task and user_id and task_name and task_status):
             return HttpResponse("Date of task, user ID, task name, and task status must be provided in the request body.", status=400)
 
-        with connection.cursor() as cursor:
-            # Check if task_set exists for the given user_id and date_of_task
-            cursor.execute("""
-                SELECT task_set_id 
-                FROM task_set 
-                WHERE date_of_task = %s AND user_id = %s
-            """, [date_of_task, user_id])
-            task_set_id = cursor.fetchone()
+        task_set_id = get_task_set_id(date_of_task, user_id)
 
-            if task_set_id is None:
-                # If task_set doesn't exist, insert a new one
+        if task_set_id is None:
+            # If task_set doesn't exist, insert a new one
+            with connection.cursor() as cursor:
                 cursor.execute("""
                     INSERT INTO task_set (user_id, date_of_task) 
                     VALUES (%s, %s)
@@ -43,13 +67,12 @@ def store_tasks(request):
                 # Get the generated task_set_id
                 task_set_id = cursor.lastrowid
 
-            # Insert task
+        with connection.cursor() as cursor:
             cursor.execute("""
                 INSERT INTO tasks (task_set_id, task_name, task_status) 
                 VALUES (%s, %s, %s)
             """, [task_set_id, task_name, task_status])
 
-        # If everything is successful, return success response
         return HttpResponse(json.dumps({"message": "Task stored successfully."}), content_type="application/json")
 
     except Exception as e:
@@ -83,42 +106,52 @@ def retrieve_tasks(request, task_set_id):
     return HttpResponse(json_result, content_type="application/json")
 
 
-def update_task(request):
+
+def update_task_name(request):
     try:
         # Parse request data
         data = json.loads(request.body)
         task_id = data.get('task_id')
         task_name = data.get('task_name')
-        task_status = data.get('task_status')
 
-        if not (task_id and (task_name or task_status)):
-            return HttpResponse("task_id and at least one of task_name or task_status must be provided.", status=400)
+        if not (task_id and task_name):
+            return HttpResponse("task_id and task_name must be provided.", status=400)
 
         with connection.cursor() as cursor:
-            # Update task name and/or task status if provided
-            if task_name and task_status:
-                cursor.execute("""
-                    UPDATE tasks 
-                    SET task_name = %s, task_status = %s 
-                    WHERE task_id = %s
-                """, [task_name, task_status, task_id])
-            elif task_name:
-                cursor.execute("""
-                    UPDATE tasks 
-                    SET task_name = %s 
-                    WHERE task_id = %s
-                """, [task_name, task_id])
-            elif task_status:
-                cursor.execute("""
-                    UPDATE tasks 
-                    SET task_status = %s 
-                    WHERE task_id = %s
-                """, [task_status, task_id])
+            cursor.execute("""
+                UPDATE tasks 
+                SET task_name = %s 
+                WHERE task_id = %s
+            """, [task_name, task_id])
 
-        return HttpResponse(json.dumps({"message": "Task updated successfully."}), content_type="application/json")
+        return HttpResponse(json.dumps({"message": "Task name updated successfully."}), content_type="application/json")
 
     except Exception as e:
         return HttpResponse(f"An error occurred: {str(e)}", status=500)
+
+
+def update_task_status(request):
+    try:
+        # Parse request data
+        data = json.loads(request.body)
+        task_id = data.get('task_id')
+        task_status = data.get('task_status')
+
+        if not (task_id and task_status):
+            return HttpResponse("task_id and task_status must be provided.", status=400)
+
+        with connection.cursor() as cursor:
+            cursor.execute("""
+                UPDATE tasks 
+                SET task_status = %s 
+                WHERE task_id = %s
+            """, [task_status, task_id])
+
+        return HttpResponse(json.dumps({"message": "Task status updated successfully."}), content_type="application/json")
+
+    except Exception as e:
+        return HttpResponse(f"An error occurred: {str(e)}", status=500)
+
 
 
 def delete_task(request):
