@@ -1,8 +1,0 @@
-POST
-http://127.0.0.1:8000/submitborrow
-
-{
-    "book_id": 1002,
-    "member_id": 1000,
-    "staff_id": 1
-}

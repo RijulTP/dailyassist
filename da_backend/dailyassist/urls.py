@@ -7,6 +7,8 @@ urlpatterns = [
     path('update_task_name/', views.update_task_name, name='update_task_name'),
     path('update_task_status/', views.update_task_status, name='update_task_status'),
     path('deletetask/', views.delete_task, name='delete_task'),
-    path('get_task_set_id/',views.get_task_set_id_api,name="get_task_set_id_api")
+    path('get_task_set_id/',views.get_task_set_id_api,name="get_task_set_id_api"),
+    path('add_survey/',views.add_survey,name="add_survey"),
+    path('view_surveys/',views.view_surveys,name="view_surveys")
     # Add more URL patterns as needed
 ]

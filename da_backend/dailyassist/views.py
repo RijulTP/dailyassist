@@ -12,7 +12,7 @@ import json
 from django.http import HttpResponse
 from django.db import connection
 
-
+    
 
 def get_task_set_id(date_of_task, user_id):
     with connection.cursor() as cursor:
@@ -176,319 +176,111 @@ def delete_task(request):
         return HttpResponse(f"An error occurred: {str(e)}", status=500)
 
 
-
-def viewlibrary(request):
+# Function to execute SQL command
+def execute_insert_sql_query(query, data=None):
     try:
-        print("Executing main query")
-        query = f"""
-        SELECT *
-        FROM Book
-        """
         with connection.cursor() as cursor:
-            cursor.execute(query)
-            results = cursor.fetchall()
-            print("The results are",results)
-            result_list = []
-            for row in results:
-                result_dict = {
-                    'book_id': row[0],
-                    'title': row[1],
-                    'author': row[2],
-                    'price': row[3],
-                    'publisher_id': row[4]
-                }
-                result_list.append(result_dict)
-
-            # Convert the list of dictionaries to a JSON string
-            
-
-    except Exception as e:
-        return HttpResponse(f"An error occurred: {str(e)}", status=500)
-    json_result = json.dumps(result_list)
-    return HttpResponse(json_result, content_type="application/json")
-
-
-def viewpublishers(request):
-    try:
-        print("Executing main query")
-        query = f"""
-        SELECT *
-        FROM publisher
-        """
-        with connection.cursor() as cursor:
-            cursor.execute(query)
-            results = cursor.fetchall()
-            print("The results are",results)
-            result_list = []
-            for row in results:
-                result_dict = {
-                    'publisher_id': row[0],
-                    'publisher_name': row[1],
-                    'address': row[2],
-                }
-                result_list.append(result_dict)
-
-            # Convert the list of dictionaries to a JSON string
-            
-
-    except Exception as e:
-        return HttpResponse(f"An error occurred: {str(e)}", status=500)
-    json_result = json.dumps(result_list)
-    return HttpResponse(json_result, content_type="application/json")
-
-
-def addbooks(request):
-    if request.method == "POST":
-        try:
-            result = json.loads(request.body)
-            print("The result is",result)
-            for bookKey in result:
-                title = result[bookKey]["book_name"]
-                author = result[bookKey]["author_name"]
-                price = result[bookKey]["price"]
-                P_ID = result[bookKey]["publisher"]["value"]
-                query = f"""
-                    INSERT INTO Book (title, author, price, P_ID)
-                    VALUES('{title}', '{author}', '{price}', '{P_ID}');
-                """
-                with connection.cursor() as cursor:
-                    cursor.execute(query)
-            return HttpResponse("Add New Staff API")
-        except Exception as e:
-            return HttpResponse(f"Error: {str(e)}", status=500)
-        
-
-def deletebook(request):
-    if request.method == "POST":
-        try:
-            result = json.loads(request.body)
-            print("The result is",result)
-            book_id = result["book_id"]
-            query = f"""
-                DELETE from Book WHERE book_id={book_id};
-            """
-            with connection.cursor() as cursor:
-                cursor.execute(query)
-            return HttpResponse("Deleted Book")
-        except Exception as e:
-            return HttpResponse(f"Error: {str(e)}", status=500)
-        
-
-
-def updatebook(request):
-    if request.method == "POST":
-        try:
-            result = json.loads(request.body)
-            print("The result is",result)
-            book_id = result["book_id"]
-            title = result["title"]
-            author = result["author"]
-            price = result["price"]
-            query = f"""
-                UPDATE Book set title='{title}', author='{author}', price='{price}' where book_id={book_id}
-            """
-            with connection.cursor() as cursor:
-                cursor.execute(query)
-            return HttpResponse("Updated book details")
-        except Exception as e:
-            return HttpResponse(f"Error: {str(e)}", status=500)
-        
-
-def submitBorrow(request):
-    if request.method == "POST":
-        try:
-            result = json.loads(request.body)
-            book_id = result['book_id']
-            member_id = result['member_id']
-            
-            # Set issue_date to today's date
-            issue_date = datetime.now().strftime('%Y-%m-%d')
-            
-            # Set due_date to one month from now
-            due_date = (datetime.now() + timedelta(days=30)).strftime('%Y-%m-%d')
-            
-            staff_id = 1
-
-            query = f"""
-                INSERT INTO borrow (book_id, member_id, issue_date, due_date, staff_id)
-                VALUES ({book_id}, {member_id}, '{issue_date}', '{due_date}', {staff_id})
-            """
-            with connection.cursor() as cursor:
-                cursor.execute(query)
-                
-            return HttpResponse("Updated borrow details")
-        except Exception as e:
-            return HttpResponse(f"Error: {str(e)}", status=500)
-
-def getBookName(book_id):
-    try:
-        print("Executing main query")
-        query = f"""
-        SELECT title from Book where book_id={book_id}
-        """
-        with connection.cursor() as cursor:
-            cursor.execute(query)
-            results = cursor.fetchall()
-            print("the book name is",results)
-        return results[0]
-
-
-    except Exception as e:
-        return HttpResponse(f"An error occurred: {str(e)}", status=500)
-
-
-def getMemberName(member_id):
-    try:
-        print("Executing main query")
-        query = f"""
-        SELECT name from member where member_id={member_id}
-        """
-        with connection.cursor() as cursor:
-            cursor.execute(query)
-            results = cursor.fetchall()
-            print("The member name is",results)
-        return results[0]
-
-    except Exception as e:
-        return HttpResponse(f"An error occurred: {str(e)}", status=500)
-
-
-
-def viewborrow(request):
-    try:
-        print("Executing main query")
-        query = f"""
-        SELECT *
-        FROM borrow
-        """
-        with connection.cursor() as cursor:
-            cursor.execute(query)
-            results = cursor.fetchall()
-            
-            result_list = []
-            for row in results:
-                result_dict = {
-                    'borrow_id': row[0],
-                    'book_id': row[1],
-                    'member_id': row[2],
-                    'issue_date': str(row[3]),
-                    'due_date': str(row[4]),
-                    'return_date':str(row[5])
-                }
-                result_list.append(result_dict)
-
-            processed_list = []
-            for unit in result_list:
-                book_name = getBookName(unit["book_id"])
-                member_name = getMemberName(unit["member_id"])
-                
-                processed_dict = {
-                    'borrow_id':unit['borrow_id'],
-                    'title':book_name,
-                    'member_id':unit["member_id"],
-                    'member_name': member_name,
-                    'issue_date': unit["issue_date"],
-                    'due_date': unit["due_date"],
-                    'return_date': unit["return_date"]
-                }
-                processed_list.append(processed_dict)
-                print("The processed dict are",processed_dict)
-
-    except Exception as e:
-        return HttpResponse(f"An error occurred: {str(e)}", status=500)
-    json_result = json.dumps(processed_list)
-    return HttpResponse(json_result, content_type="application/json")
-
-
-def returnbook(request):
-    if request.method == "POST":
-        try:
-            result = json.loads(request.body)
-            print("The result is",result)
-            borrow_id = result['borrow_id']
-            return_date = datetime.now().strftime('%Y-%m-%d')
-            return_date = str(return_date)
-            query = f"""
-                UPDATE borrow set return_date='{return_date}'
-                where borrow_id={borrow_id}
-            """
-            with connection.cursor() as cursor:
-                cursor.execute(query)
-            return HttpResponse("Marked the borrow as returned")
-        except Exception as e:
-            return HttpResponse(f"Error: {str(e)}", status=500)
-        
-def login(request):
-    if request.method == "POST":
-        try:
-            result = json.loads(request.body)
-            user_id = result['user_id']
-            password = result['password']
-            query = f"SELECT * FROM staff WHERE staff_uid = '{user_id}'"
-            
-            with connection.cursor() as cursor:
-                cursor.execute(query)
-                user_data = cursor.fetchone()
-                print("User data is",user_data)
-
-            if user_data is not None:
-                stored_password = user_data[3]
-                if password == stored_password:
-                    return HttpResponse("Login successful")
-                else:
-                    return HttpResponse(f"Invalid Password", status=401)
+            if data:
+                cursor.execute(query, data)
             else:
-                return HttpResponse("User not found", status=404)
-
-        except Exception as e:
-            return HttpResponse(f"Error: {str(e)}", status=500)
-
-def memberview(request):
-    try:
-        print("Executing main query")
-        query = f"""
-        SELECT *
-        FROM member
-        """
-        with connection.cursor() as cursor:
-            cursor.execute(query)
-            results = cursor.fetchall()
-            
-            result_list = []
-            for row in results:
-                result_dict = {
-                    'member_id': row[0],
-                    'name': row[1],
-                    'address': row[2],
-                    'Memb_date': str(row[3]),
-                    'Exp_date':str(row[4])
-                }
-                result_list.append(result_dict)
-
+                cursor.execute(query)
+            connection.commit()
+        return True
     except Exception as e:
-        return HttpResponse(f"An error occurred: {str(e)}", status=500)
-    json_result = json.dumps(result_list)
-    return HttpResponse(json_result, content_type="application/json")
+        print("Error:", e)
+        return False
 
+def add_survey(request):
+    if request.method == 'POST':
+        input_data = json.loads(request.body)
+        input_data = input_data["input_data"]
+        for survey_data in input_data:
+            print("survey data is",survey_data)
+            survey_title = survey_data['survey']['title']
+            survey_description = survey_data['survey']['description']
+            survey_insert_query = "INSERT INTO surveys (survey_name, survey_description) VALUES (%s, %s)"
+            survey_insert_data = (survey_title, survey_description)
+            execute_insert_sql_query(survey_insert_query, survey_insert_data)
+            
+            with connection.cursor() as cursor:
+                cursor.execute(survey_insert_query, survey_insert_data)
+                survey_id = cursor.lastrowid
 
-def addmembers(request):
-    if request.method == "POST":
-        try:
-            result = json.loads(request.body)
-            print("The result is",result)
-            for bookKey in result:
-                memb_name = result[bookKey]["member_name"]
-                memb_address = result[bookKey]["member_address"]
-                memb_date = datetime.now().strftime('%Y-%m-%d')
-                exp_date = (datetime.now() + timedelta(days=365)).strftime('%Y-%m-%d')
-
-                query = f"""
-                    INSERT INTO member(name, address, Memb_date, Exp_date) VALUES('{memb_name}', '{memb_address}', '{memb_date}', '{exp_date}');
-                """
-
-                print("The query is",query)
+            questions = survey_data['questions']
+            for question_data in questions:
+                question_text = question_data['question_text']
+                question_type = question_data['type']
+                survey_question_insert_query = "INSERT INTO survey_questions (survey_id, question, question_type) VALUES (%s, %s, %s)"
+                survey_question_insert_data = (survey_id, question_text, question_type)
                 with connection.cursor() as cursor:
-                    cursor.execute(query)
-            return HttpResponse("Add New Staff API")
-        except Exception as e:
-            return HttpResponse(f"Error: {str(e)}", status=500)
+                    cursor.execute(survey_question_insert_query, survey_question_insert_data)
+                    question_id = cursor.lastrowid
+
+                if question_type == 'multiple_choice':
+                    choices = question_data['choices']
+                    for choice in choices:
+                        choice_insert_query = "INSERT INTO survey_choices (survey_question_id, choices) VALUES (%s, %s)"
+                        choice_insert_data = (question_id, choice)
+                        execute_insert_sql_query(choice_insert_query, choice_insert_data)
+
+        return JsonResponse({'message': 'Data inserted successfully'})
+    else:
+        return JsonResponse({'error': 'Only POST requests are allowed'})
+    
+
+def execute_select_sql_query(query, data=None):
+    try:
+        with connection.cursor(dictionary=True) as cursor:
+            if data:
+                cursor.execute(query, data)
+            else:
+                cursor.execute(query)
+            result = cursor.fetchall()
+        return result
+    except Exception as e:
+        print("Error:", e)
+        return None
+    
+def view_surveys(request):
+    output_data = []
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT * FROM surveys")
+            surveys = cursor.fetchall()
+
+            if surveys:
+                for survey in surveys:
+                    survey_data = {
+                        'survey': {
+                            'title': survey[1],  # Assuming title is the second column
+                            'description': survey[2]  # Assuming description is the third column
+                        },
+                        'questions': []
+                    }
+
+                    cursor.execute("SELECT * FROM survey_questions WHERE survey_id = %s", [survey[0]])
+                    questions = cursor.fetchall()
+
+                    if questions:
+                        for question in questions:
+                            question_data = {
+                                'survey_question_id': question[0],  # Assuming survey_question_id is the first column
+                                'question_text': question[2],  # Assuming question_text is the fourth column
+                                'type': question[3],  # Assuming type is the third column
+                            }
+                            print("the question 2 is",question[3])
+                            if question[3] == 'multiple_choice':
+                                print("The question is multiple choice")
+                                cursor.execute("SELECT choices FROM survey_choices WHERE survey_question_id = %s", [question[0]])
+                                choices = cursor.fetchall()
+                                if choices:
+                                    question_data['choices'] = [choice[0] for choice in choices]
+
+                            survey_data['questions'].append(question_data)
+
+                    output_data.append(survey_data)
+
+        return JsonResponse(output_data, safe=False)
+    except Exception as e:
+        print("Error:", e)
+        return JsonResponse({'error': 'An error occurred while fetching surveys'}, status=500)
