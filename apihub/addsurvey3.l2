@@ -1,0 +1,71 @@
+POST
+http://127.0.0.1:8000/dailyassist/add_survey/
+
+{
+    "input_data": [
+        {
+            "survey": {
+                "title": "Work-Life Balance Survey",
+                "description": "Evaluate your work-life balance."
+            },
+            "questions": [
+                {
+                    "survey_question_id": 1,
+                    "type": "multiple_choice",
+                    "question_text": "Do you feel stressed at work?",
+                    "choices": ["Yes", "No"]
+                },
+                {
+                    "survey_question_id": 2,
+                    "type": "multiple_choice",
+                    "question_text": "Do you regularly work overtime?",
+                    "choices": ["Yes", "No"]
+                },
+                {
+                    "survey_question_id": 3,
+                    "type": "rating",
+                    "question_text": "Rate your satisfaction with your current job on a scale of 1 to 5."
+                },
+                {
+                    "survey_question_id": 4,
+                    "type": "rating",
+                    "question_text": "Rate your satisfaction with your personal life on a scale of 1 to 5."
+                },
+                {
+                    "survey_question_id": 5,
+                    "type": "multiple_choice",
+                    "question_text": "Do you have flexibility in your work schedule?",
+                    "choices": ["Yes", "No"]
+                },
+                {
+                    "survey_question_id": 6,
+                    "type": "rating",
+                    "question_text": "Rate your stress level related to work on a scale of 1 to 5."
+                },
+                {
+                    "survey_question_id": 7,
+                    "type": "multiple_choice",
+                    "question_text": "Do you take regular breaks during your workday?",
+                    "choices": ["Yes", "No"]
+                },
+                {
+                    "survey_question_id": 8,
+                    "type": "multiple_choice",
+                    "question_text": "Do you feel that your workload is manageable?",
+                    "choices": ["Yes", "No"]
+                },
+                {
+                    "survey_question_id": 9,
+                    "type": "multiple_choice",
+                    "question_text": "Do you have time for hobbies and leisure activities?",
+                    "choices": ["Yes", "No"]
+                },
+                {
+                    "survey_question_id": 10,
+                    "type": "rating",
+                    "question_text": "Rate your overall work-life balance on a scale of 1 to 5."
+                }
+            ]
+        }
+    ]
+}

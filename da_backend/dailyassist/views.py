@@ -200,8 +200,6 @@ def add_survey(request):
             survey_description = survey_data['survey']['description']
             survey_insert_query = "INSERT INTO surveys (survey_name, survey_description) VALUES (%s, %s)"
             survey_insert_data = (survey_title, survey_description)
-            execute_insert_sql_query(survey_insert_query, survey_insert_data)
-            
             with connection.cursor() as cursor:
                 cursor.execute(survey_insert_query, survey_insert_data)
                 survey_id = cursor.lastrowid
@@ -286,6 +284,79 @@ def view_surveys(request):
         return JsonResponse({'error': 'An error occurred while fetching surveys'}, status=500)
 
 
+def view_survey_list(request):
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT survey_id, survey_name, survey_description FROM surveys")
+            surveys = cursor.fetchall()
+
+            survey_list = []
+            for survey in surveys:
+                survey_data = {
+                    'survey_id': survey[0],
+                    'survey_name': survey[1],
+                    'survey_description': survey[2]
+                }
+                survey_list.append(survey_data)
+
+        return JsonResponse({'surveys': survey_list}, safe=False)
+    except Exception as e:
+        print("Error:", e)
+        return JsonResponse({'error': 'An error occurred while fetching survey list'}, status=500)
+
+def view_survey_details(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            survey_id = data.get('survey_id')
+
+            if not survey_id:
+                return JsonResponse({'error': 'survey_id is required in the request body'}, status=400)
+
+            with connection.cursor() as cursor:
+                # Fetch survey name and description
+                cursor.execute("SELECT survey_name, survey_description FROM surveys WHERE survey_id = %s", [survey_id])
+                survey_info = cursor.fetchone()
+                if not survey_info:
+                    return JsonResponse({'error': 'Survey not found'}, status=404)
+
+                survey_name, survey_description = survey_info
+
+                # Fetch questions
+                cursor.execute("SELECT survey_question_id, question, question_type FROM survey_questions WHERE survey_id = %s", [survey_id])
+                questions = cursor.fetchall()
+
+                survey_details = {
+                    'survey_id': survey_id,
+                    'survey_name': survey_name,
+                    'survey_description': survey_description,
+                    'questions': []
+                }
+
+                for question in questions:
+                    question_data = {
+                        'question_id': question[0],
+                        'question_text': question[1],
+                        'type': question[2],
+                        'choices': []
+                    }
+
+                    if question[2] == 'multiple_choice':
+                        cursor.execute("SELECT choices FROM survey_choices WHERE survey_question_id = %s", [question[0]])
+                        choices = cursor.fetchall()
+                        for choice in choices:
+                            question_data['choices'].append(choice[0])
+
+                    survey_details['questions'].append(question_data)
+
+            return JsonResponse({'survey_details': survey_details}, safe=False)
+        except Exception as e:
+            print("Error:", e)
+            return JsonResponse({'error': 'An error occurred while fetching survey details'}, status=500)
+    else:
+        return JsonResponse({'error': 'Only POST requests are allowed for this API'})
+
+    
 def delete_survey(request):
     if request.method == 'POST':
         try:

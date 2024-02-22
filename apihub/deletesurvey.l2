@@ -2,5 +2,5 @@ POST
 http://127.0.0.1:8000/dailyassist/delete_survey/
 
 {
-    "survey_id": 1
+    "survey_id": 16
 }

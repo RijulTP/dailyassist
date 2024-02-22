@@ -1,75 +1,39 @@
 import React, { useEffect, useState } from "react"
 import SurveyQuestion from "./SurveyQuestion"
-import StickyTopBar from "../components/StickyTopBar"
-import { useSelector, useDispatch } from "react-redux"
+import { useSearchParams } from "next/navigation"
 
 const REQUIRED = "*required"
 
 export default function SurveyPage() {
-  const surveyQuestions = [
-    {
-      survey_question_id: 1,
-      type: 1, // Assuming type 4 for scale
-      question_text:
-        "Describe your current level of productivity?",
-    },
-    {
-      survey_question_id: 2,
-      type: 4,
-      question_text:
-        "How satisfied are you with your work-life balance on a scale of 1 to 5?",
-    },
-    {
-      survey_question_id: 3,
-      type: 4,
-      question_text:
-        "On a scale of 1 to 5, how happy are you with your current situation?",
-    },
-    {
-      survey_question_id: 4,
-      type: 2, // Assuming type 2 for multiple choice
-      question_text: "What are the main factors affecting your productivity?",
-      choices: [
-        { value: "Workload" },
-        { value: "Distractions" },
-        { value: "Time Management" },
-        { value: "Health Issues" },
-        { value: "Other" },
-      ],
-    },
-    {
-      survey_question_id: 5,
-      type: 2,
-      question_text:
-        "Which of the following best describes your current work schedule?",
-      choices: [
-        { value: "9-5, Monday to Friday" },
-        { value: "Flexible hours" },
-        { value: "Shift work" },
-        { value: "Freelance/Contractor" },
-        { value: "Other" },
-      ],
-    },
-    // Add more questions as needed
-  ]
-
-  // Define your API call function here
-  async function getSurveyQuestions() {
-    // Implement your API call logic here
-  }
+  const [surveyQuestions, setSurveyQuestions] = useState([])
+  const [surveyTitle, setSurveyTitle] = useState("")
+  const [surveyDescription, setSurveyDescription] = useState("")
+  const searchParams = useSearchParams()
+  const survey_id = searchParams.get("survey_id")
 
   useEffect(() => {
-    const fetchSurveyQuestions = async () => {
-      try {
-        const surveyQuestionsData = await getSurveyQuestions()
-        // Process survey questions data
-      } catch (error) {
-        console.error("Error fetching survey questions:", error)
-      }
+    if (survey_id) {
+      // Fetch survey details from the API
+      fetch(`http://localhost:8000/dailyassist/view_survey_details/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ survey_id: survey_id }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data && data.survey_details && data.survey_details.questions) {
+            setSurveyTitle(data.survey_details.survey_name)
+            setSurveyDescription(data.survey_details.survey_description)
+            setSurveyQuestions(data.survey_details.questions)
+          }
+        })
+        .catch((error) =>
+          console.error("Error fetching survey details:", error)
+        )
     }
-
-    fetchSurveyQuestions()
-  }, [])
+  }, [survey_id])
 
   return (
     <div>
@@ -78,9 +42,8 @@ export default function SurveyPage() {
         style={{ overflowY: "scroll", height: "100vh" }}
       >
         <div className="surveyStartContainer">
-          {/* <h1 className="surveyTitlePage" style={{ fontWeight: "bold" }}>
-            Hello
-          </h1> */}
+          <h1 className="my-5 mx-10  text-3xl font-bold mb-4">{surveyTitle}</h1>
+          <h2 className="mx-10  text-xl font-bold mb-8">{surveyDescription}</h2>
         </div>
         {surveyQuestions.map((qsObject, index) => (
           <div key={qsObject.survey_question_id}>
@@ -91,7 +54,7 @@ export default function SurveyPage() {
               choices={qsObject.choices}
               incentiveVisible={true}
               surveyQid={qsObject.survey_question_id}
-              surveyId={1}
+              surveyId={survey_id}
             />
           </div>
         ))}

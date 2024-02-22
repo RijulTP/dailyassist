@@ -1,0 +1,72 @@
+POST
+http://127.0.0.1:8000/dailyassist/add_survey/
+
+{
+    "input_data": [
+        {
+            "survey": {
+                "title": "Well-being Survey",
+                "description": "Assess your overall well-being and happiness."
+            },
+            "questions": [
+                {
+                    "survey_question_id": 1,
+                    "type": "paragraph",
+                    "question_text": "How would you describe your overall mood today?"
+                },
+                {
+                    "survey_question_id": 2,
+                    "type": "multiple_choice",
+                    "question_text": "How often do you engage in physical exercise?",
+                    "choices": ["Daily", "Several times a week", "Once a week", "Rarely", "Never"]
+                },
+                {
+                    "survey_question_id": 3,
+                    "type": "rating",
+                    "question_text": "Rate your overall happiness on a scale of 1 to 5."
+                },
+                {
+                    "survey_question_id": 4,
+                    "type": "multiple_choice",
+                    "question_text": "Which of the following best describes your diet?",
+                    "choices": ["Vegetarian", "Vegan", "Pescatarian", "Omnivore"]
+                },
+                {
+                    "survey_question_id": 5,
+                    "type": "rating",
+                    "question_text": "Rate your stress level on a scale of 1 to 5."
+                },
+                {
+                    "survey_question_id": 6,
+                    "type": "multiple_choice",
+                    "question_text": "How many hours of sleep do you typically get per night?",
+                    "choices": ["Less than 5 hours", "5-6 hours", "6-7 hours", "7-8 hours", "More than 8 hours"]
+                },
+                {
+                    "survey_question_id": 7,
+                    "type": "multiple_choice",
+                    "question_text": "Do you engage in mindfulness or meditation practices?",
+                    "choices": ["Yes, regularly", "Sometimes", "No, never"]
+                },
+                {
+                    "survey_question_id": 8,
+                    "type": "multiple_choice",
+                    "question_text": "How satisfied are you with your work-life balance?",
+                    "choices": ["Very satisfied", "Satisfied", "Neutral", "Dissatisfied", "Very dissatisfied"]
+                },
+                {
+                    "survey_question_id": 9,
+                    "type": "multiple_choice",
+                    "question_text": "How often do you socialize with friends or family?",
+                    "choices": ["Daily", "Several times a week", "Once a week", "Rarely", "Never"]
+                },
+                {
+                    "survey_question_id": 10,
+                    "type": "rating",
+                    "question_text": "Rate your overall well-being on a scale of 1 to 5."
+                }
+            ]
+        }
+    ]
+}
+

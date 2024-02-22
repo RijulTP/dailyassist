@@ -10,6 +10,8 @@ urlpatterns = [
     path('get_task_set_id/',views.get_task_set_id_api,name="get_task_set_id_api"),
     path('add_survey/',views.add_survey,name="add_survey"),
     path('view_surveys/',views.view_surveys,name="view_surveys"),
-    path('delete_survey/',views.delete_survey,name="delete_survey")
-    # Add more URL patterns as needed
+    path('delete_survey/',views.delete_survey,name="delete_survey"),
+    path('view_survey_list/',views.view_survey_list ,name="view_survey_list"),
+    path('view_survey_details/',views.view_survey_details,name="view_survey_details"),
+
 ]

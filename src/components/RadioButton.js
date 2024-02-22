@@ -36,14 +36,14 @@ export default function RadioButton({
         {radioButtons.map((item) => (
           <button
             className={`w-48 px-6 py-3 rounded-lg focus:outline-none ${
-              selectedOption === item.value
+              selectedOption === item
                 ? "bg-blue-500 text-white"
                 : "bg-gray-200 text-gray-800 hover:bg-gray-300"
             }`}
-            onClick={() => selectHandler(item.value)}
-            key={item.value}
+            onClick={() => selectHandler(item)}
+            key={item}
           >
-            <span className="font-bold">{item.value}</span>
+            <span className="font-bold">{item}</span>
           </button>
         ))}
       </div>
