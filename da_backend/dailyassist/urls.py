@@ -9,6 +9,7 @@ urlpatterns = [
     path('deletetask/', views.delete_task, name='delete_task'),
     path('get_task_set_id/',views.get_task_set_id_api,name="get_task_set_id_api"),
     path('add_survey/',views.add_survey,name="add_survey"),
-    path('view_surveys/',views.view_surveys,name="view_surveys")
+    path('view_surveys/',views.view_surveys,name="view_surveys"),
+    path('delete_survey/',views.delete_survey,name="delete_survey")
     # Add more URL patterns as needed
 ]

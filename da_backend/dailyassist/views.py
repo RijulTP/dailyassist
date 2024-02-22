@@ -284,3 +284,36 @@ def view_surveys(request):
     except Exception as e:
         print("Error:", e)
         return JsonResponse({'error': 'An error occurred while fetching surveys'}, status=500)
+
+
+def delete_survey(request):
+    if request.method == 'POST':
+        try:
+            # Extract survey_id from the request body
+            data = json.loads(request.body)
+            survey_id = data.get('survey_id')
+
+            if not survey_id:
+                return JsonResponse({'error': 'survey_id is required in the request body'}, status=400)
+
+            with connection.cursor() as cursor:
+
+                # Delete associated choices from the survey_choices table
+                delete_choices_query = "DELETE FROM survey_choices WHERE survey_question_id IN (SELECT survey_question_id FROM survey_questions WHERE survey_id = %s)"
+                cursor.execute(delete_choices_query, [survey_id])
+
+                                # Delete associated questions from the survey_questions table
+                delete_questions_query = "DELETE FROM survey_questions WHERE survey_id = %s"
+                cursor.execute(delete_questions_query, [survey_id])
+
+                # Delete the survey from the surveys table
+                delete_survey_query = "DELETE FROM surveys WHERE survey_id = %s"
+                cursor.execute(delete_survey_query, [survey_id])
+
+
+            return JsonResponse({'message': 'Survey deleted successfully'})  # 204 No Content
+        except Exception as e:
+            print("Error:", e)
+            return JsonResponse({'error': 'An error occurred while deleting the survey'}, status=500)
+    else:
+        return JsonResponse({'error': 'Only POST requests are allowed'})
