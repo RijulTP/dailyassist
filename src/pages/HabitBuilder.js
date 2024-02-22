@@ -41,7 +41,7 @@ const HabitBuildingPage = () => {
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {habits.map((habit, index) => (
           <Link
-            href={`habit/${index + 1}`}
+            href={`HabitPage`}
             key={index}
             className="transition duration-300 ease-in-out transform hover:scale-110"
           >
