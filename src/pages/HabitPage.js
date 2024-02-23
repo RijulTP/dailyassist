@@ -1,17 +1,27 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faCheck, faClock } from "@fortawesome/free-solid-svg-icons"
-
-const challenges = {
-  1: "Make your bed",
-  2: "Clean your wardrobe",
-  // Add more challenges here for each day
-}
+import { useSearchParams } from "next/navigation"
 
 const HabitPage = () => {
+  const searchParams = useSearchParams()
+  const habit_id = searchParams.get("habit_id")
+
+  const [habitDetails, setHabitDetails] = useState({})
   const [selectedDay, setSelectedDay] = useState(null)
   const [currentDay, setCurrentDay] = useState(1)
   const [completedDays, setCompletedDays] = useState([])
+
+  useEffect(() => {
+    if (habit_id) {
+      fetch(`http://localhost:8000/dailyassist/view_habit_details/${habit_id}/`)
+        .then((response) => response.json())
+        .then((data) => {
+          setHabitDetails(data)
+        })
+        .catch((error) => console.error("Error fetching habit details:", error))
+    }
+  }, [habit_id])
 
   const handleBoxClick = (index) => {
     if (index < currentDay - 1) {
@@ -33,7 +43,7 @@ const HabitPage = () => {
   return (
     <div className="container mx-auto mt-8 px-4">
       <h1 className="text-3xl font-semibold mb-4">My Habit Tracker</h1>
-      <p className="mb-4">Habit: Keep Your Surroundings Clean</p>
+      <p className="mb-4">Habit: {habitDetails.habit_name}</p>
       <p className="mb-4">
         Instructions: Click on each day to reveal the challenge. Complete the
         challenge for the current day before advancing to the next day.
@@ -71,11 +81,14 @@ const HabitPage = () => {
             <h2 className="text-lg font-semibold mb-2">
               Challenge for Day {selectedDay + 1}
             </h2>
-            <p>{challenges[selectedDay + 1]}</p>
+            <p>
+              {habitDetails.challenges &&
+                habitDetails.challenges[selectedDay + 1]}
+            </p>
           </div>
         )}
       </div>
-      {
+      {selectedDay !== null && (
         <div className="mt-4">
           <button
             className={`py-2 text-white px-4 rounded ${
@@ -91,7 +104,7 @@ const HabitPage = () => {
               : "Mark as Complete"}
           </button>
         </div>
-      }
+      )}
     </div>
   )
 }

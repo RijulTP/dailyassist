@@ -19,7 +19,7 @@ const HabitBuildingPage = () => {
   // Define your list of habits with their respective icons
   const habits = [
     { name: "Exercise", icon: faDumbbell },
-    { name: "Read", icon: faBookOpenReader },
+    { name: "Reading", icon: faBookOpenReader },
     { name: "Meditate", icon: faM },
     { name: "Drink Water", icon: faGlassWater },
     { name: "Journal", icon: faBook },
@@ -41,7 +41,7 @@ const HabitBuildingPage = () => {
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {habits.map((habit, index) => (
           <Link
-            href={`HabitPage`}
+            href={{ pathname: "/HabitPage", query: { habit_id: index + 1 } }}
             key={index}
             className="transition duration-300 ease-in-out transform hover:scale-110"
           >
