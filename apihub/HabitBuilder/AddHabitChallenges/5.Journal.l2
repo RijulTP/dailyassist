@@ -1,0 +1,29 @@
+POST
+http://127.0.0.1:8000/dailyassist/add_habit_challenges/
+
+{
+  "habit_id": 5,
+  "challenges": {
+    "1": "Write three things you're grateful for each morning",
+    "2": "Reflect on your emotions and write about them for 5 minutes",
+    "3": "Describe your day in detail before going to bed",
+    "4": "Write down one thing you learned today",
+    "5": "Set three goals for the next day and journal about how you plan to achieve them",
+    "6": "Practice free-writing for 10 minutes every evening",
+    "7": "Create a list of affirmations and write them out daily",
+    "8": "Journal about a recent challenge you faced and how you overcame it",
+    "9": "Document your daily accomplishments, no matter how small",
+    "10": "Write a letter to your future self",
+    "11": "Reflect on a mistake you made and write about what you learned from it",
+    "12": "Record your thoughts on a recent book or article you read",
+    "13": "Journal about a person who inspires you and why",
+    "14": "Write about a place you'd like to visit and why it interests you",
+    "15": "Document your progress towards a personal goal",
+    "16": "Describe a moment of kindness you witnessed or experienced",
+    "17": "Explore your fears and write about how you can overcome them",
+    "18": "Reflect on your relationships and write about ways to improve them",
+    "19": "Write about a hobby or interest you're passionate about",
+    "20": "Journal about a memorable experience from your past",
+    "21": "Record your thoughts on a recent podcast or TED talk"
+  }
+}

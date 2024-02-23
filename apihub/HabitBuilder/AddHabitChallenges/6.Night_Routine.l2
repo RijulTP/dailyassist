@@ -1,0 +1,29 @@
+POST
+http://127.0.0.1:8000/dailyassist/add_habit_challenges/
+
+{
+  "habit_id": 6,
+  "challenges": {
+    "1": "Prepare your clothes for the next day",
+    "2": "Limit screen time an hour before bed",
+    "3": "Read for at least 15 minutes before sleeping",
+    "4": "Write down three things you're grateful for",
+    "5": "Drink a glass of water before bedtime",
+    "6": "Stretch or do yoga for 10 minutes",
+    "7": "Set tomorrow's goals",
+    "8": "Take a relaxing bath or shower",
+    "9": "Listen to calming music or a podcast",
+    "10": "Practice deep breathing exercises",
+    "11": "Reflect on your day in a journal",
+    "12": "Dim the lights to signal bedtime",
+    "13": "Use a sleep mask or blackout curtains",
+    "14": "Avoid caffeine after 2pm",
+    "15": "Turn off all electronic devices",
+    "16": "Use aromatherapy with lavender scent",
+    "17": "Limit alcohol consumption before bed",
+    "18": "Set a consistent bedtime and wake-up time",
+    "19": "Create a soothing bedtime ritual",
+    "20": "Visualize a peaceful place before sleeping",
+    "21": "Use a white noise machine or app"
+  }
+}

@@ -1,0 +1,29 @@
+POST
+http://127.0.0.1:8000/dailyassist/add_habit_challenges/
+
+{
+  "habit_id": 7,
+  "challenges": {
+    "1": "Repeat 'I am capable of achieving my goals' every morning",
+    "2": "Write down three things I am grateful for each day",
+    "3": "Practice deep breathing and repeat 'I am calm and in control' during stressful moments",
+    "4": "Visualize my success and repeat 'I am worthy of success' before starting each task",
+    "5": "Replace negative self-talk with positive affirmations like 'I am confident and capable'",
+    "6": "Create a mantra like 'I am enough' and repeat it during meditation sessions",
+    "7": "Leave positive notes for myself in places I frequent throughout the day",
+    "8": "Surround myself with positive affirmations by decorating my workspace with uplifting quotes",
+    "9": "Repeat 'I deserve love and respect' whenever I feel doubt about my worth",
+    "10": "Start a gratitude journal and write 'I am surrounded by abundance' as the first entry",
+    "11": "Repeat 'I am resilient and can overcome any challenge' during tough times",
+    "12": "Set reminders on my phone to repeat affirmations like 'I am worthy of happiness'",
+    "13": "Create a vision board with images that represent my goals and aspirations",
+    "14": "Repeat 'I am enough just as I am' while looking in the mirror each morning",
+    "15": "Engage in positive self-talk during exercise by saying 'I am strong and capable'",
+    "16": "Join a support group where members encourage each other with affirmations",
+    "17": "Repeat 'I attract positive opportunities into my life' as a daily affirmation",
+    "18": "Practice mindfulness and repeat 'I am present and fully engaged in this moment'",
+    "19": "Write down my achievements and repeat 'I am proud of my progress' at the end of each week",
+    "20": "Surround myself with people who uplift me and affirm my worth",
+    "21": "End each day by repeating 'I am grateful for the lessons learned and the growth achieved'"
+  }
+}

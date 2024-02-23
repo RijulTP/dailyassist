@@ -388,3 +388,93 @@ def delete_survey(request):
             return JsonResponse({'error': 'An error occurred while deleting the survey'}, status=500)
     else:
         return JsonResponse({'error': 'Only POST requests are allowed'})
+    
+def add_habit_challenges(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body.decode('utf-8'))
+            habit_id = data.get('habit_id')
+            challenges = data.get('challenges')
+
+            print("Inside challenge adding")
+
+            # Validate input
+            if not habit_id or not challenges:
+                return JsonResponse({'error': 'habit_id and challenges are required'}, status=400)
+
+            with connection.cursor() as cursor:
+                for day, challenge in challenges.items():
+                    cursor.execute("INSERT INTO habit_challenges (habit_id, day, challenge_name) VALUES (%s, %s, %s)", [habit_id, day, challenge])
+
+            return JsonResponse({'message': 'Challenges added successfully'}, status=201)
+
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
+
+    return JsonResponse({'error': 'Only POST requests are allowed'}, status=405)
+
+def view_habit_details(request, habit_id):
+    if request.method == 'GET':
+        try:
+            with connection.cursor() as cursor:
+                cursor.execute("""
+                    SELECT habit_name
+                    FROM habits
+                    WHERE habit_id = %s
+                """, [habit_id])
+                habit_row = cursor.fetchone()
+
+                cursor.execute("""
+                    SELECT day, challenge_name
+                    FROM habit_challenges
+                    WHERE habit_id = %s
+                """, [habit_id])
+                challenges_rows = cursor.fetchall()
+
+            if habit_row:
+                habit_name = habit_row[0]
+                challenges = {row[0]: row[1] for row in challenges_rows}
+                response_data = {
+                    'habit_name': habit_name,
+                    'challenges': challenges
+                }
+                return JsonResponse(response_data, status=200)
+            else:
+                return JsonResponse({'error': 'Habit with the specified ID does not exist'}, status=404)
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
+    else:
+        return JsonResponse({'error': 'Only GET requests are allowed'}, status=405)
+    
+def list_habits(request):
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT habit_id, habit_name FROM habits;")
+        habits = cursor.fetchall()
+    
+    habits_list = []
+    for habit in habits:
+        habits_list.append({
+            'id': habit[0],
+            'name': habit[1],
+        })
+
+    return JsonResponse({'habits': habits_list})
+
+
+def delete_habit_challenges(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body.decode('utf-8'))
+            habit_id = data.get('habit_id')
+
+            if not habit_id:
+                return JsonResponse({'error': 'habit_id is required'}, status=400)
+
+            with connection.cursor() as cursor:
+                cursor.execute("DELETE FROM habit_challenges WHERE habit_id = %s", [habit_id])
+            
+            return JsonResponse({'message': 'Habit challenges deleted successfully'})
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
+    else:
+        return JsonResponse({'error': 'Only POST requests are allowed'}, status=405)

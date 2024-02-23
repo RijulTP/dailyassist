@@ -1,0 +1,29 @@
+POST
+http://127.0.0.1:8000/dailyassist/add_habit_challenges/
+
+{
+  "habit_id": 3,
+  "challenges": {
+    "1": "Start with 5 minutes of guided meditation",
+    "2": "Practice deep breathing exercises for 10 minutes",
+    "3": "Set aside a quiet space for meditation sessions",
+    "4": "Explore different meditation techniques for variety",
+    "5": "Gradually increase meditation duration by 2 minutes each day",
+    "6": "Keep a meditation journal to track progress and insights",
+    "7": "Experiment with morning and evening meditation routines",
+    "8": "Attend a meditation class or workshop for guidance",
+    "9": "Use meditation apps for structured sessions and timers",
+    "10": "Find a comfortable sitting position for meditation",
+    "11": "Incorporate mindfulness into daily activities like eating or walking",
+    "12": "Practice gratitude meditation for a positive mindset",
+    "13": "Engage in body scan meditation to relax muscles and release tension",
+    "14": "Join a meditation group or community for support and accountability",
+    "15": "Read books or listen to podcasts on meditation for inspiration",
+    "16": "Practice loving-kindness meditation to cultivate compassion",
+    "17": "Experiment with different meditation music or ambient sounds",
+    "18": "Take breaks throughout the day for short meditation sessions",
+    "19": "Use visualization techniques during meditation for focus and relaxation",
+    "20": "Set realistic goals and celebrate small victories in your meditation journey",
+    "21": "Reflect on the benefits of meditation to stay motivated and committed"
+  }
+}

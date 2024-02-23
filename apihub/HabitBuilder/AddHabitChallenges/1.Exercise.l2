@@ -1,0 +1,29 @@
+POST
+http://127.0.0.1:8000/dailyassist/add_habit_challenges/
+
+{
+  "habit_id": 1,
+  "challenges": {
+    "1": "Take a 10-minute walk",
+    "2": "Do 10 push-ups",
+    "3": "Stretch for 5 minutes",
+    "4": "Go for a 15-minute jog",
+    "5": "Complete a 20-minute home workout video",
+    "6": "Practice yoga for 15 minutes",
+    "7": "Do 20 jumping jacks",
+    "8": "Cycle for 30 minutes",
+    "9": "Try a new workout routine",
+    "10": "Do a plank for 1 minute",
+    "11": "Take the stairs instead of the elevator",
+    "12": "Dance to your favorite song for 10 minutes",
+    "13": "Swim for 20 minutes",
+    "14": "Attend a fitness class",
+    "15": "Play a sport for 30 minutes",
+    "16": "Try interval training for 15 minutes",
+    "17": "Do 15 squats",
+    "18": "Hike for an hour",
+    "19": "Participate in a charity run",
+    "20": "Join a gym and do a full-body workout",
+    "21": "Set a new personal fitness goal"
+  }
+}

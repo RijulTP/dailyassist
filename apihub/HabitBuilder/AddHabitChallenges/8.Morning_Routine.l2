@@ -1,0 +1,29 @@
+POST
+http://127.0.0.1:8000/dailyassist/add_habit_challenges/
+
+{
+  "habit_id": 8,
+  "challenges": {
+    "1": "Wake up at 6:00 AM",
+    "2": "Drink a glass of water immediately after waking up",
+    "3": "Stretch for 5 minutes",
+    "4": "Read a motivational quote",
+    "5": "Plan your day ahead",
+    "6": "Take a cold shower",
+    "7": "Meditate for 10 minutes",
+    "8": "Eat a healthy breakfast",
+    "9": "Write down three things you're grateful for",
+    "10": "Go for a brisk walk",
+    "11": "Listen to uplifting music",
+    "12": "Review your goals",
+    "13": "Practice deep breathing exercises",
+    "14": "Journal for 5 minutes",
+    "15": "Do a quick workout routine",
+    "16": "Visualize a successful day",
+    "17": "Avoid checking your phone for the first 30 minutes",
+    "18": "Tidy up your living space",
+    "19": "Plan one small act of kindness for the day",
+    "20": "Smile at yourself in the mirror",
+    "21": "Express gratitude to someone in your life"
+  }
+}

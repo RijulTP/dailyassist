@@ -1,0 +1,29 @@
+POST
+http://127.0.0.1:8000/dailyassist/add_habit_challenges/
+
+{
+  "habit_id": 4,
+  "challenges": {
+    "1": "Drink 8 ounces of water immediately upon waking up",
+    "2": "Keep a water bottle with you at all times and take sips regularly throughout the day",
+    "3": "Set reminders on your phone to drink water every hour",
+    "4": "Replace one sugary or caffeinated beverage with a glass of water each day",
+    "5": "Drink a glass of water before every meal",
+    "6": "Track your water intake using a hydration app",
+    "7": "Infuse your water with fruit slices for added flavor",
+    "8": "Challenge yourself to finish a certain number of water bottles per day",
+    "9": "Reward yourself for reaching daily water intake goals",
+    "10": "Participate in a water drinking challenge with friends or family",
+    "11": "Experiment with different temperatures of water to find what you enjoy most",
+    "12": "Keep a water intake journal to monitor your progress",
+    "13": "Drink a glass of water before and after exercise",
+    "14": "Replace one snack per day with a glass of water",
+    "15": "Try herbal teas or flavored water as alternatives to plain water",
+    "16": "Set up a hydration station at work or home with a variety of water options",
+    "17": "Join online communities or forums for accountability and support",
+    "18": "Educate yourself on the benefits of staying hydrated to stay motivated",
+    "19": "Challenge yourself to drink a certain amount of water by specific times throughout the day",
+    "20": "Experiment with different types of water containers to find what you prefer",
+    "21": "Practice mindful drinking by focusing on the taste and sensation of each sip"
+  }
+}

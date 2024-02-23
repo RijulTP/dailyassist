@@ -1,0 +1,29 @@
+POST
+http://127.0.0.1:8000/dailyassist/add_habit_challenges/
+
+{
+  "habit_id": 2,
+  "challenges": {
+    "1": "Read for 10 minutes before bed",
+    "2": "Set aside 15 minutes each morning for reading",
+    "3": "Create a cozy reading nook in your home",
+    "4": "Join a book club or reading group",
+    "5": "Visit your local library or bookstore weekly",
+    "6": "Choose a specific genre or topic to focus on for a month",
+    "7": "Turn off electronic devices and read for 20 minutes",
+    "8": "Keep a reading journal to track progress and thoughts",
+    "9": "Listen to audiobooks during your commute or chores",
+    "10": "Reward yourself with a small treat after finishing a book",
+    "11": "Share book recommendations with friends or family",
+    "12": "Attend author readings or book signings",
+    "13": "Read aloud to a friend or family member",
+    "14": "Explore different formats like e-books, physical books, and audiobooks",
+    "15": "Challenge yourself to read a book outside of your comfort zone",
+    "16": "Create a reading schedule and stick to it",
+    "17": "Start a virtual book club with friends or online communities",
+    "18": "Take notes while reading to improve comprehension",
+    "19": "Set reading goals for the month or year",
+    "20": "Discuss books with others to deepen understanding",
+    "21": "Revisit a childhood favorite book"
+  }
+}
