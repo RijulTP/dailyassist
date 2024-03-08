@@ -40,7 +40,7 @@ const DAHomePage = () => {
             }`}
           >
             <p className="text-center text-2xl font-bold mb-4">
-              Welcome to Daily Assist!
+              Welcome to Life Navigator!
             </p>
             <MotivationalQuote />
           </div>
@@ -82,7 +82,7 @@ const DAHomePage = () => {
               }}
             >
               <FontAwesomeIcon icon={faRobot} class="w-10 mr-2" />
-              <span>Daily Assist Bot</span>
+              <span>Life Navigator Bot</span>
             </Link>
           </div>
         </div>

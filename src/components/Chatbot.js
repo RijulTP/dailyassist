@@ -2,24 +2,52 @@ import { useEffect, useRef, useState } from "react"
 import { GoogleGenerativeAI } from "@google/generative-ai"
 import InputBox from "./InputBox"
 import ReactMarkdown from "react-markdown"
+import axios from "axios"
 
+
+// const OPENAI_KEY = "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"
+// const speak = (text) => {
+//   const utterance = new SpeechSynthesisUtterance(text)
+//   window.speechSynthesis.speak(utterance)
+// }
 const API_KEY = "AIzaSyBmrOh1cZRZIEtznQSsUTqY13isfsfXCCA"
 const genAI = new GoogleGenerativeAI(API_KEY)
 const model = genAI.getGenerativeModel({ model: "gemini-pro" })
+
+
+const speakText = async (text) => {
+  try {
+    // Speak the provided text
+    await Speech.speak(text, {
+      language: 'en-US', // Adjust language as needed (see Expo Speech docs)
+      pitch: 1, // Adjust pitch (1.0 is normal)
+      rate: 1, // Adjust speaking rate (1.0 is normal)
+    });
+  } catch (error) {
+    console.error('Error speaking:', error);
+  }
+};
+
+// Usage example in your component
+const handleClick = async () => {
+  const textToSpeak = 'This is a test message for Text-to-Speech.';
+  await speakText(textToSpeak);
+};
+
 
 const Header = () => {
   return (
     <div className="header">
       <h1 id="chat-header" className="text-lg font-bold ml-2">
-        Daily Assist Bot
+        Life Navigator Bot
       </h1>
-      <small className="block">Chat with daily assist bot</small>
+      <small className="block">Chat with Life Navigator bot</small>
     </div>
   )
 }
 
 const identifyIntentQuery =
-  "I want you to analyze this message and identify the intent, These are the possible intents 1.add_tasks 2.view_tasks 3.other .if the intent is add_tasks/view_tasks, Reply with following JSON format with quotes {intent:intent_name,intent_task:intent_task}, if the intent is others do a normal reply"
+  'I want you to analyze this message and identify the intent, These are the possible intents 1.add_tasks 2.view_tasks 3.other_tasks, Reply with following JSON format {"intent":"intent_name","intent_task":"intent_task"}'
 
 const ChatBot = () => {
   const chatContainerRef = useRef(null)
@@ -29,16 +57,19 @@ const ChatBot = () => {
   useEffect(() => {
     // Function to run once on starting the bot
     const initialInstructions =
-      "I want you to act as a personal productivity and wellbeing manager, and your name will be Daily assist bot, When someone asks your name it should be Daily assist bot. Now Greet the user in a breif way"
+      "I want you to act as a personal productivity and wellbeing manager, and your name will be Life Navigator bot, When someone asks your name it should be Life Navigator bot. Now Greet the user in a breif way"
     sendInitialMessage(initialInstructions)
   }, []) // Empty dependency array ensures this runs only once on component mount
 
   const sendInitialMessage = async (initialInstructions) => {
     try {
+      let sample_text = "Hello there"
+      speak(sample_text)
       const result = await model.generateContent(initialInstructions)
       const text = await result.response.text()
 
       const isCode = text.includes("```")
+      
 
       setMessages((prevMessages) => [
         ...prevMessages,
@@ -66,7 +97,7 @@ const ChatBot = () => {
     setLoading(true)
 
     try {
-      const result = await model.generateContent(modifiedInputText)
+      let result = await model.generateContent(modifiedInputText)
       let text = await result.response.text()
 
       const isCode = text.includes("```")
@@ -82,14 +113,18 @@ const ChatBot = () => {
 
         if (job_name === "add_tasks") {
           console.log("executing job: AddTask, With Params", job_params)
-          text="Added the task"
+          text =
+            "I have added the task: " + job_params + " Let's get it done soon!"
         } else {
           console.log("executing job: ViewTask, With Params", job_params)
-          text="Here are the tasks"
+          text = "Here are the tasks"
         }
       } else {
         console.log("String does not contain intent")
+        result = await model.generateContent(inputText)
+        text = await result.response.text()
       }
+      // speak(text)
       setMessages((prevMessages) => [
         ...prevMessages,
         {

@@ -72,7 +72,7 @@ export default function Home() {
     <div className="min-h-screen flex items-center justify-center w-full">
       <div className="w-full max-w-md p-6 bg-white rounded-lg mx-auto">
         <h1 className="text-6xl text-gray-800 font-bold mb-10 text-center">
-          Welcome to Daily Assist
+          Welcome to Life Navigator
         </h1>
         <div className="grid gap-4 mb-4">
           <label htmlFor="username" className="text-lg text-gray-500">

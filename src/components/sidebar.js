@@ -85,7 +85,7 @@ export default function MainSidebar({ children }) {
             onClick={() => router.push("/DailyAssistBot")}
           >
             {" "}
-            Daily Assist Bot
+            Life Navigator Bot
           </MenuItem>
           <br />
           <br />
