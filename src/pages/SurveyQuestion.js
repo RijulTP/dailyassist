@@ -54,6 +54,7 @@ export default function SurveyQuestion(props) {
             qNum={props.qNum}
             points={MULTIPLE_CHOICE_INCENTIVE}
             onAnswer={handleAnswer}
+            answers={props.answers}
           />
         )
       case YES_NO_TYPE:
@@ -66,6 +67,7 @@ export default function SurveyQuestion(props) {
             qNum={props.qNum}
             points={YES_NO_INCENTIVE}
             onAnswer={handleAnswer}
+            answers={props.answers}
           />
         )
       case RATING_TYPE:
@@ -80,6 +82,7 @@ export default function SurveyQuestion(props) {
               qNum={props.qNum}
               points={RATING_INCENTIVE}
               onAnswer={handleAnswer}
+              answers={props.answers}
             />
           </div>
         )
@@ -93,6 +96,7 @@ export default function SurveyQuestion(props) {
             qNum={props.qNum}
             points={PARA_INCENTIVE}
             onAnswer={handleAnswer}
+            answers={props.answers}
           />
         )
       default:

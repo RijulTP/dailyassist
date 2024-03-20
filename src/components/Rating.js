@@ -17,7 +17,8 @@ export default function Rating({
   surveyId,
   qNum,
   points,
-  onAnswer // Add onAnswer prop
+  onAnswer, // Add onAnswer prop
+  answers, // Add answers prop
 }) {
   const dispatch = useDispatch()
   const [selectedOption, setOption] = useState(null)
@@ -37,7 +38,11 @@ export default function Rating({
     const newTxtSize = TXTSIZE_NUM1 - TXTSIZE_NUM2 * (choiceNo - DEFAULT_NUM)
     setDiameter(newDiameter)
     setTxtSize(newTxtSize)
-  }, [choiceNo])
+
+    if (answers[qNum]) {
+      setOption(answers[qNum])
+    }
+  }, [choiceNo, qNum, answers])
 
   function optionSelect(newlySelected) {
     console.log("Option select", newlySelected)
@@ -50,7 +55,9 @@ export default function Rating({
 
   function optionDeselect() {
     setOption(null)
-    // Dispatch relevant actions
+    if (onAnswer) {
+      onAnswer(null) // Call onAnswer function with null to signify deselection
+    }
   }
 
   const selectHandler = (newlySelected) => {

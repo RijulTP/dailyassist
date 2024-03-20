@@ -21,7 +21,7 @@ const DailyWeeklyAnalysisPage = () => {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100">
       <h1 className="text-3xl font-bold mb-8">Daily/Weekly Analysis Page</h1>
-      <div className="max-w-md mx-auto bg-gray-200 p-6 rounded-lg shadow-lg">
+      <div className="max-w-md mx-auto p-6 rounded-lg shadow-lg">
         <p className="text-lg mb-4">
           This page provides insights into your daily and weekly productivity
           and well-being based on tasks completed and surveys done.

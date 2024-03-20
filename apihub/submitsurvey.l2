@@ -1,0 +1,14 @@
+POST
+http://127.0.0.1:8000/dailyassist/submit_survey/
+
+{
+    "user_id": 2,
+    "survey_id": 17,
+    "answer_json": {
+        "1": "Yes",
+        "2": "No",
+        "3": "Maybe",
+        "4": "Yes",
+        "5": "No"
+    }
+}

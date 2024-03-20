@@ -13,10 +13,10 @@ export default function SurveyPage() {
   const searchParams = useSearchParams()
   const survey_id = searchParams.get("survey_id")
 
-  useEffect(()=>{
-    console.log("The answers are",answers)
+  useEffect(() => {
+    console.log("The answers are", answers)
+  }, [answers])
 
-  },[answers])
   const questionsPerPage = 1 // Change this value to adjust number of questions per page
 
   useEffect(() => {
@@ -55,6 +55,27 @@ export default function SurveyPage() {
     setAnswers({ ...answers, [questionNumber]: answer })
   }
 
+  const handleSubmit = () => {
+    // Send answers to API
+    fetch("http://localhost:8000/dailyassist/submit_survey/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        user_id: 1,
+        survey_id: survey_id,
+        answer_json: answers,
+      }),
+    })
+      .then(() => {
+        console.log("Survey submitted successfully")
+      })
+      .catch((error) => {
+        console.error("Error submitting survey answers:", error)
+      })
+  }
+
   return (
     <div className="p-8">
       <div className="mb-10 text-center">
@@ -79,8 +100,12 @@ export default function SurveyPage() {
                 surveyId={survey_id}
                 className="mx-auto max-w-md"
                 onAnswer={(answer) =>
-                  handleAnswer(index + 1 + currentPage * questionsPerPage, answer)
+                  handleAnswer(
+                    index + 1 + currentPage * questionsPerPage,
+                    answer
+                  )
                 }
+                answers={answers}
               />
             </div>
           ))}
@@ -100,6 +125,14 @@ export default function SurveyPage() {
             onClick={nextPage}
           >
             Next
+          </button>
+        )}
+        {currentPage === surveyQuestions.length / questionsPerPage - 1 && (
+          <button
+            className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+            onClick={handleSubmit}
+          >
+            Submit
           </button>
         )}
       </div>

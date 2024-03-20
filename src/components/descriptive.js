@@ -11,11 +11,16 @@ export default function Descriptive({
   surveyId,
   qNum,
   points,
-  onAnswer // Add onAnswer prop
+  onAnswer, // Add onAnswer prop,
+  answers,
 }) {
   const [answer, setAnswer] = useState("")
   const dispatch = useDispatch()
-
+  useEffect(() => {
+    if (answers[qNum]) {
+      setAnswer(answers[qNum]);
+    }
+  },[answers])
   useEffect(() => {
     checkAnswer()
   }, [answer])

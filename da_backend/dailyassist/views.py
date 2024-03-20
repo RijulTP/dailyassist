@@ -478,3 +478,27 @@ def delete_habit_challenges(request):
             return JsonResponse({'error': str(e)}, status=500)
     else:
         return JsonResponse({'error': 'Only POST requests are allowed'}, status=405)
+    
+def submit_survey(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            user_id = data.get('user_id')
+            survey_id = data.get('survey_id')
+            answer_json = json.dumps(data.get('answer_json'))
+            survey_response_date = datetime.now().date()
+
+            if user_id is None or survey_id is None or answer_json is None:
+                return JsonResponse({'error': 'Missing required fields'}, status=400)
+
+            with connection.cursor() as cursor:
+                sql = "INSERT INTO survey_result (user_id, survey_id, answer_json, survey_response_date) VALUES (%s, %s, %s, %s)"
+                cursor.execute(sql, [user_id, survey_id, answer_json, survey_response_date])
+
+            return JsonResponse({'message': 'Survey result submitted successfully'}, status=201)
+
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
+
+    else:
+        return JsonResponse({'error': 'Only POST requests are allowed'}, status=405)

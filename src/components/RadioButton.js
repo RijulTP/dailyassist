@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 
 export default function RadioButton({
   radioButtons,
@@ -7,30 +7,44 @@ export default function RadioButton({
   surveyId,
   qNum,
   points,
-  onAnswer // Add onAnswer prop
+  onAnswer, // Add onAnswer prop
+  answers, // Add answers prop
 }) {
-  const [selectedOption, setOption] = useState(null)
+  const [selectedOption, setSelectedOption] = useState(null)
+
+  useEffect(() => {
+    if (answers[qNum]) {
+      setSelectedOption(answers[qNum])
+    }
+  }, [answers, qNum])
 
   function optionSelect(newlySelected) {
-    setOption(newlySelected)
+    setSelectedOption(newlySelected)
     if (onAnswer) {
       onAnswer(newlySelected) // Call onAnswer function with selected option
     }
   }
 
   function optionDeselect() {
-    // Dispatch relevant actions
-    setOption(null)
+    setSelectedOption(null)
+    if (onAnswer) {
+      onAnswer(null) // Call onAnswer function with null to signify deselection
+    }
   }
 
   const selectHandler = (newlySelected) => {
-    const answerElement = {
-      survey_question_id: surveyQid,
-      surveyId: surveyId,
-      user_answer: { type: qType, answer: newlySelected },
+    console.log(
+      "selectedoption:",
+      selectedOption,
+      "newlySelected:",
+      newlySelected
+    )
+    if (selectedOption === newlySelected) {
+      console.log("Deselecting..")
+      optionDeselect()
+    } else {
+      optionSelect(newlySelected)
     }
-    if (selectedOption === newlySelected) optionDeselect()
-    else optionSelect(newlySelected)
   }
 
   return (
