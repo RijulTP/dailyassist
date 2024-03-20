@@ -11,6 +11,7 @@ export default function Descriptive({
   surveyId,
   qNum,
   points,
+  onAnswer // Add onAnswer prop
 }) {
   const [answer, setAnswer] = useState("")
   const dispatch = useDispatch()
@@ -25,6 +26,9 @@ export default function Descriptive({
       finalPoints = points
     }
     // Dispatch relevant actions
+    if (onAnswer) {
+      onAnswer(answer) // Call onAnswer function with the entered answer
+    }
   }
 
   const handleChange = (e) => {

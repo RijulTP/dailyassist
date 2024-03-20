@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { useSelector, useDispatch } from "react-redux"
+import { useDispatch } from "react-redux"
 
 const DIAMETER_NUM1 = 50
 const DIAMETER_NUM2 = 5.5
@@ -17,13 +17,13 @@ export default function Rating({
   surveyId,
   qNum,
   points,
+  onAnswer // Add onAnswer prop
 }) {
   const dispatch = useDispatch()
   const [selectedOption, setOption] = useState(null)
   const [ratingOps, setRatingOps] = useState([])
   const [diameter, setDiameter] = useState(0)
   const [txtSize, setTxtSize] = useState(0)
-  // const currentAnswer = useSelector((state) => state.app.surveyAnswers[surveyId]?.[qNum]?.user_answer?.answer);
 
   useEffect(() => {
     const newRatingOps = Array.from(
@@ -39,16 +39,12 @@ export default function Rating({
     setTxtSize(newTxtSize)
   }, [choiceNo])
 
-  // useEffect(() => {
-  //   if (currentAnswer) {
-  //     // Dispatch relevant actions
-  //   }
-  //   setOption(currentAnswer);
-  // }, [currentAnswer]);
-
   function optionSelect(newlySelected) {
     console.log("Option select", newlySelected)
     setOption(newlySelected)
+    if (onAnswer) {
+      onAnswer(newlySelected) // Call onAnswer function with selected rating
+    }
     // Dispatch relevant actions
   }
 

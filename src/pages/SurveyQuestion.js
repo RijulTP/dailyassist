@@ -34,6 +34,13 @@ function typeIdToTypeName(id) {
 
 export default function SurveyQuestion(props) {
   console.log(props.qType)
+
+  const handleAnswer = (answer) => {
+    if (props.onAnswer) {
+      props.onAnswer(answer)
+    }
+  }
+
   const renderField = () => {
     switch (props.qType) {
       case MULTIPLE_CHOICE_TYPE:
@@ -46,6 +53,7 @@ export default function SurveyQuestion(props) {
             surveyId={props.surveyId}
             qNum={props.qNum}
             points={MULTIPLE_CHOICE_INCENTIVE}
+            onAnswer={handleAnswer}
           />
         )
       case YES_NO_TYPE:
@@ -57,6 +65,7 @@ export default function SurveyQuestion(props) {
             surveyId={props.surveyId}
             qNum={props.qNum}
             points={YES_NO_INCENTIVE}
+            onAnswer={handleAnswer}
           />
         )
       case RATING_TYPE:
@@ -70,6 +79,7 @@ export default function SurveyQuestion(props) {
               surveyId={props.surveyId}
               qNum={props.qNum}
               points={RATING_INCENTIVE}
+              onAnswer={handleAnswer}
             />
           </div>
         )
@@ -82,6 +92,7 @@ export default function SurveyQuestion(props) {
             surveyId={props.surveyId}
             qNum={props.qNum}
             points={PARA_INCENTIVE}
+            onAnswer={handleAnswer}
           />
         )
       default:

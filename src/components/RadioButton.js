@@ -7,12 +7,15 @@ export default function RadioButton({
   surveyId,
   qNum,
   points,
+  onAnswer // Add onAnswer prop
 }) {
   const [selectedOption, setOption] = useState(null)
 
   function optionSelect(newlySelected) {
     setOption(newlySelected)
-    // Dispatch relevant actions
+    if (onAnswer) {
+      onAnswer(newlySelected) // Call onAnswer function with selected option
+    }
   }
 
   function optionDeselect() {

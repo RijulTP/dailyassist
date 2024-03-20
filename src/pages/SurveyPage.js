@@ -9,9 +9,14 @@ export default function SurveyPage() {
   const [surveyTitle, setSurveyTitle] = useState("")
   const [surveyDescription, setSurveyDescription] = useState("")
   const [currentPage, setCurrentPage] = useState(0)
+  const [answers, setAnswers] = useState({})
   const searchParams = useSearchParams()
   const survey_id = searchParams.get("survey_id")
 
+  useEffect(()=>{
+    console.log("The answers are",answers)
+
+  },[answers])
   const questionsPerPage = 1 // Change this value to adjust number of questions per page
 
   useEffect(() => {
@@ -46,6 +51,10 @@ export default function SurveyPage() {
     setCurrentPage(currentPage - 1)
   }
 
+  const handleAnswer = (questionNumber, answer) => {
+    setAnswers({ ...answers, [questionNumber]: answer })
+  }
+
   return (
     <div className="p-8">
       <div className="mb-10 text-center">
@@ -69,6 +78,9 @@ export default function SurveyPage() {
                 surveyQid={qsObject.survey_question_id}
                 surveyId={survey_id}
                 className="mx-auto max-w-md"
+                onAnswer={(answer) =>
+                  handleAnswer(index + 1 + currentPage * questionsPerPage, answer)
+                }
               />
             </div>
           ))}
