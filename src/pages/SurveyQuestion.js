@@ -62,14 +62,16 @@ export default function SurveyQuestion(props) {
       case RATING_TYPE:
         const choiceNo = 5
         return (
-          <Rating
-            choiceNo={choiceNo}
-            surveyQid={props.surveyQid}
-            qType={props.qType}
-            surveyId={props.surveyId}
-            qNum={props.qNum}
-            points={RATING_INCENTIVE}
-          />
+          <div className="flex justify-center">
+            <Rating
+              choiceNo={choiceNo}
+              surveyQid={props.surveyQid}
+              qType={props.qType}
+              surveyId={props.surveyId}
+              qNum={props.qNum}
+              points={RATING_INCENTIVE}
+            />
+          </div>
         )
       case PARA_TYPE:
         return (
@@ -87,18 +89,13 @@ export default function SurveyQuestion(props) {
     }
   }
 
-  const styleType =
-    typeIdToTypeName(props.qType) === RATINGCONTAINER
-      ? "ratingContainer"
-      : "itemContainer"
-
   return (
-    <div className={`${styleType} rounded-lg shadow-md p-8 mx-10 max-w-md`}>
-      <div className="flex items-center justify-center w-6 h-6 bg-blue-500 text-white font-bold text-lg rounded-full mb-6">
+    <div className={`rounded-lg shadow-md p-8 mx-auto max-w-3xl`}>
+      <div className="flex items-center justify-center w-12 h-12 bg-blue-500 text-white font-bold text-2xl rounded-full mb-6">
         {props.qNum}
       </div>
       <div>
-        <h1 className="font-bold text-3xl mb-4">{props.name}</h1>
+        <h1 className="font-bold text-4xl mb-4 text-center">{props.name}</h1>
         {renderField()}
       </div>
     </div>

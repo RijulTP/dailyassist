@@ -34,7 +34,7 @@ export default function Descriptive({
 
   return (
     <div>
-      <div className="descriptiveContainer rounded-lg p-4 mb-4">
+      <div className="rounded-lg p-4 mb-4">
         <textarea
           placeholder="Enter your answer"
           rows={4}

@@ -32,7 +32,7 @@ export default function RadioButton({
 
   return (
     <>
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col items-center gap-4 h-100">
         {radioButtons.map((item) => (
           <button
             className={`w-48 px-6 py-3 rounded-lg focus:outline-none ${

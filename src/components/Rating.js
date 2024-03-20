@@ -67,7 +67,7 @@ export default function Rating({
   }
 
   return (
-    <div className="flex flex-row items-center  space-x-4">
+    <div className="flex flex-row items-center  space-x-4 h-100">
       {ratingOps.map((item) => (
         <button
           className={`w-${diameter} h-${diameter} rounded-full flex items-center justify-center focus:outline-none ${

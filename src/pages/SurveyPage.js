@@ -8,8 +8,11 @@ export default function SurveyPage() {
   const [surveyQuestions, setSurveyQuestions] = useState([])
   const [surveyTitle, setSurveyTitle] = useState("")
   const [surveyDescription, setSurveyDescription] = useState("")
+  const [currentPage, setCurrentPage] = useState(0)
   const searchParams = useSearchParams()
   const survey_id = searchParams.get("survey_id")
+
+  const questionsPerPage = 1 // Change this value to adjust number of questions per page
 
   useEffect(() => {
     if (survey_id) {
@@ -35,29 +38,58 @@ export default function SurveyPage() {
     }
   }, [survey_id])
 
+  const nextPage = () => {
+    setCurrentPage(currentPage + 1)
+  }
+
+  const previousPage = () => {
+    setCurrentPage(currentPage - 1)
+  }
+
   return (
-    <div>
-      <div
-        className="surveyBackground"
-        style={{ overflowY: "scroll", height: "100vh" }}
-      >
-        <div className="surveyStartContainer">
-          <h1 className="my-5 mx-10  text-3xl font-bold mb-4">{surveyTitle}</h1>
-          <h2 className="mx-10  text-xl font-bold mb-8">{surveyDescription}</h2>
-        </div>
-        {surveyQuestions.map((qsObject, index) => (
-          <div key={qsObject.survey_question_id}>
-            <SurveyQuestion
-              qNum={index + 1}
-              qType={qsObject.type}
-              name={qsObject.question_text}
-              choices={qsObject.choices}
-              incentiveVisible={true}
-              surveyQid={qsObject.survey_question_id}
-              surveyId={survey_id}
-            />
-          </div>
-        ))}
+    <div className="p-8">
+      <div className="mb-10 text-center">
+        <h1 className="text-4xl font-bold mb-4">{surveyTitle}</h1>
+        <h2 className="text-lg mb-8">{surveyDescription}</h2>
+      </div>
+      <div style={{ height: "600px" }}>
+        {surveyQuestions
+          .slice(
+            currentPage * questionsPerPage,
+            (currentPage + 1) * questionsPerPage
+          )
+          .map((qsObject, index) => (
+            <div key={qsObject.survey_question_id} className="mb-8 text-center">
+              <SurveyQuestion
+                qNum={index + 1 + currentPage * questionsPerPage}
+                qType={qsObject.type}
+                name={qsObject.question_text}
+                choices={qsObject.choices}
+                incentiveVisible={true}
+                surveyQid={qsObject.survey_question_id}
+                surveyId={survey_id}
+                className="mx-auto max-w-md"
+              />
+            </div>
+          ))}
+      </div>
+      <div className="text-center">
+        {currentPage > 0 && (
+          <button
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-4"
+            onClick={previousPage}
+          >
+            Previous
+          </button>
+        )}
+        {surveyQuestions.length > (currentPage + 1) * questionsPerPage && (
+          <button
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            onClick={nextPage}
+          >
+            Next
+          </button>
+        )}
       </div>
     </div>
   )
