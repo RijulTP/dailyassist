@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react"
 import SurveyQuestion from "./SurveyQuestion"
 import { useSearchParams } from "next/navigation"
+import { useRouter } from "next/router"
 
 const REQUIRED = "*required"
 
@@ -12,6 +13,7 @@ export default function SurveyPage() {
   const [answers, setAnswers] = useState({})
   const searchParams = useSearchParams()
   const survey_id = searchParams.get("survey_id")
+  const router = useRouter()
 
   useEffect(() => {
     console.log("The answers are", answers)
@@ -70,6 +72,7 @@ export default function SurveyPage() {
     })
       .then(() => {
         console.log("Survey submitted successfully")
+        router.push("/SurveySubmitted")
       })
       .catch((error) => {
         console.error("Error submitting survey answers:", error)
