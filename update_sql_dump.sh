@@ -5,6 +5,6 @@ username=$DB_USER
 password=$DB_PASSWORD
 
 # Execute the MySQL command
-mysqldump -u "$username" -p"$password" Library > Library_Backend/Materials/Library.sql
+mysqldump -u "$username" -p"$password" DailyAssist > da_backend/Materials/DailyAssist.sql
 
 
