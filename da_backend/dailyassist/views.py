@@ -460,6 +460,40 @@ def list_habits(request):
 
     return JsonResponse({'habits': habits_list})
 
+def view_habit_percentages(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            user_id = data.get('user_id')
+            with connection.cursor() as cursor:
+                cursor.execute("""
+                    SELECT habits.habit_id, habits.habit_name, habit_progress.last_completed_day
+                    FROM habits
+                    LEFT JOIN habit_progress ON habits.habit_id = habit_progress.habit_id AND habit_progress.user_id = %s
+                """, [user_id])
+                habits_progress = cursor.fetchall()
+                
+            habits_list = []
+            for habit_progress in habits_progress:
+                habit_id = habit_progress[0]
+                habit_name = habit_progress[1]
+                last_completed_day = habit_progress[2] if habit_progress[2] else 0
+                total_days = 21
+                percentage = round((last_completed_day / total_days) * 100, 2) if total_days > 0 else 0
+                
+                habits_list.append({
+                    'id': habit_id,
+                    'name': habit_name,
+                    'last_completed_day': last_completed_day,
+                    'percentage': percentage
+                })
+
+            return JsonResponse({'habits': habits_list}, status=200)
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
+    else:
+        return JsonResponse({'error': 'Only POST requests are allowed'}, status=405)
+
 
 def delete_habit_challenges(request):
     if request.method == 'POST':
@@ -578,3 +612,141 @@ def update_habit_progress(request):
             return JsonResponse({'error': str(e)}, status=500)
     else:
         return JsonResponse({'error': 'Only POST requests are allowed'}, status=405)
+    
+
+
+def view_survey_results(request):
+    if request.method == 'POST':
+        try:
+            # Get user_id and survey_id from the query parameters
+            data = json.loads(request.body)
+            user_id = data.get('user_id')
+            survey_id = data.get('survey_id')
+
+            if user_id is None or survey_id is None:
+                return JsonResponse({'error': 'Missing required fields (user_id or survey_id)'}, status=400)
+
+            # Fetch questions for the survey_id
+            with connection.cursor() as cursor:
+                cursor.execute("""
+                    SELECT question
+                    FROM survey_questions
+                    WHERE survey_id = %s
+                """, [survey_id])
+                questions = cursor.fetchall()
+
+                # Create a dictionary to map sequential question IDs to questions
+                question_mapping = {str(i + 1): q[0] for i, q in enumerate(questions)}
+
+            # Fetch the latest survey result for the user_id and survey_id
+            with connection.cursor() as cursor:
+                cursor.execute("""
+                    SELECT answer_json, survey_response_date
+                    FROM survey_result
+                    WHERE user_id = %s AND survey_id = %s
+                    ORDER BY survey_response_date DESC
+                    LIMIT 1
+                """, [user_id, survey_id])
+                survey_result = cursor.fetchone()
+
+            if survey_result:
+                answer_json = json.loads(survey_result[0])
+                answers_with_questions = {question_mapping[q_id]: answer for q_id, answer in answer_json.items()}
+                result_dict = {
+                    'answer_json': answers_with_questions,
+                    'survey_response_date': survey_result[1].isoformat()  # Assuming you want date in ISO format
+                }
+                return JsonResponse({'result': result_dict}, status=200)
+            else:
+                return JsonResponse({'error': 'No survey results found'}, status=404)
+
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
+
+    else:
+        return JsonResponse({'error': 'Only GET requests are allowed'}, status=405)
+    
+
+def fetch_survey_ids_attended(user_id):
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute("""
+                SELECT DISTINCT survey_id
+                FROM survey_result
+                WHERE user_id = %s
+            """, [user_id])
+            survey_ids = [row[0] for row in cursor.fetchall()]
+        return survey_ids
+    except Exception as e:
+        raise e
+
+def fetch_latest_survey_results(user_id, survey_id):
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute("""
+                SELECT question, answer_json
+                FROM survey_questions
+                JOIN survey_result ON survey_questions.survey_id = survey_result.survey_id
+                WHERE survey_result.user_id = %s AND survey_questions.survey_id = %s
+                ORDER BY survey_result.survey_response_date DESC
+                LIMIT 1
+            """, [user_id, survey_id])
+            result = cursor.fetchone()
+
+            cursor.execute("""
+                SELECT question
+                FROM survey_questions
+                WHERE survey_id = %s
+            """, [survey_id])
+            questions = cursor.fetchall()
+
+            # Create a dictionary to map sequential question IDs to questions
+            question_mapping = {str(i + 1): q[0] for i, q in enumerate(questions)}
+            print("Answer json is",result[1])
+            answer_json = json.loads(result[1])
+            print("Answer json is",answer_json)
+            answers_with_questions = {question_mapping[q_id]: answer for q_id, answer in answer_json.items()}
+        
+        if answers_with_questions:
+            return answers_with_questions
+        else:
+            return None
+    except Exception as e:
+        raise e
+
+def fetch_combined_survey_results(user_id):
+    try:
+        # Fetch survey IDs attended by the user
+        survey_ids = fetch_survey_ids_attended(user_id)
+
+        # Create a dictionary to store combined survey results
+        combined_results = {}
+
+        # Fetch and combine survey results for each survey ID
+        for survey_id in survey_ids:
+            latest_survey_result = fetch_latest_survey_results(user_id, survey_id)
+            # combined_results.append(latest_survey_result)
+            combined_results.update(latest_survey_result)
+
+        return combined_results
+    except Exception as e:
+        raise e
+
+def view_all_survey_results(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            user_id = data.get('user_id')
+
+            if user_id is None:
+                return JsonResponse({'error': 'Missing user_id'}, status=400)
+
+            combined_results = fetch_combined_survey_results(user_id)
+
+            return JsonResponse({'combined_results': combined_results}, status=200)
+
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
+
+    else:
+        return JsonResponse({'error': 'Only GET requests are allowed'}, status=405)

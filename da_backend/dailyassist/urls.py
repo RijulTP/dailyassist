@@ -20,6 +20,8 @@ urlpatterns = [
     path('submit_survey/', views.submit_survey, name='submit_survey'),
     path('view_habit_progress/', views.view_habit_progress, name='view_habit_progress'),
     path('update_habit_progress/', views.update_habit_progress, name='update_habit_progress'),
-
+    path('view_habit_percentages/', views.view_habit_percentages, name='view_habit_percentages'),
+    path('view_survey_results/', views.view_survey_results, name='fetch_survey_results'),
+    path('view_all_survey_results/', views.view_all_survey_results, name='view_all_survey_results'),
 
 ]

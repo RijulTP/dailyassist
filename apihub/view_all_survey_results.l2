@@ -1,0 +1,6 @@
+POST
+http://127.0.0.1:8000/dailyassist/view_all_survey_results/
+
+{
+    "user_id":1,
+}
