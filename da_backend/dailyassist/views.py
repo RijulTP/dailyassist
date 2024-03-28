@@ -502,3 +502,79 @@ def submit_survey(request):
 
     else:
         return JsonResponse({'error': 'Only POST requests are allowed'}, status=405)
+    
+
+def view_habit_progress(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            user_id = data.get('user_id')
+            habit_id = data.get('habit_id')
+            with connection.cursor() as cursor:
+                cursor.execute("""
+                    SELECT last_completed_day
+                    FROM habit_progress
+                    WHERE habit_id = %s AND user_id = %s
+                """, [habit_id, user_id])
+                progress_row = cursor.fetchone()
+                if progress_row:
+                    last_completed_day = progress_row[0]
+                    response_data = {'last_completed_day': last_completed_day}
+                    return JsonResponse(response_data, status=200)
+                else:
+                    last_completed_day = 0
+                    insert_query = """
+                            INSERT INTO habit_progress (habit_id, user_id, last_completed_day) 
+                            VALUES (%s, %s, %s)
+                    """
+                    cursor.execute(insert_query,[habit_id,user_id,last_completed_day])
+                    response_data = {'last_completed_day': last_completed_day}
+                    return JsonResponse(response_data, status=200)
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
+    else:
+        return JsonResponse({'error': 'Only GET requests are allowed'}, status=405)
+
+def update_habit_progress(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            user_id = data.get('user_id')
+            habit_id = data.get('habit_id')
+            last_completed_day = data.get('last_completed_day')
+
+            print(user_id,habit_id,last_completed_day)
+
+            with connection.cursor() as cursor:
+                # Check if the record already exists
+                check_query = """
+                    SELECT COUNT(*) FROM habit_progress 
+                    WHERE habit_id = %s AND user_id = %s
+                """
+                cursor.execute(check_query, (habit_id, user_id))
+                existing_records_count = cursor.fetchone()[0]
+
+                if existing_records_count > 0:
+                    # Update the existing record
+                    update_query = """
+                        UPDATE habit_progress 
+                        SET last_completed_day = %s 
+                        WHERE habit_id = %s AND user_id = %s
+                    """
+                    cursor.execute(update_query, (last_completed_day, habit_id, user_id))
+                else:
+                    # Insert a new record
+                    insert_query = """
+                        INSERT INTO habit_progress (habit_id, user_id, last_completed_day) 
+                        VALUES (%s, %s, %s)
+                    """
+                    cursor.execute(insert_query, (habit_id, user_id, last_completed_day))
+
+
+            print("The last completed day is ",last_completed_day)
+
+            return JsonResponse({'success': True}, status=200)
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
+    else:
+        return JsonResponse({'error': 'Only POST requests are allowed'}, status=405)

@@ -3,9 +3,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faCheck, faClock } from "@fortawesome/free-solid-svg-icons"
 import { useSearchParams } from "next/navigation"
 
+const user_id = 1
+
 const HabitPage = () => {
   const searchParams = useSearchParams()
-  const habit_id = searchParams.get("habit_id")
+  const habit_id = parseInt(searchParams.get("habit_id"), 10)
 
   const [habitDetails, setHabitDetails] = useState({})
   const [selectedDay, setSelectedDay] = useState(null)
@@ -20,6 +22,27 @@ const HabitPage = () => {
           setHabitDetails(data)
         })
         .catch((error) => console.error("Error fetching habit details:", error))
+
+      fetch(`http://localhost:8000/dailyassist/view_habit_progress/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ user_id: user_id, habit_id: habit_id }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          var daysArray = []
+          for (let i = 1; i <= data.last_completed_day; i++) {
+            daysArray.push(i)
+          }
+          setCompletedDays(daysArray)
+          setCurrentDay(data.last_completed_day+1)
+          console.log("the days array is", daysArray)
+        })
+        .catch((error) =>
+          console.error("Error fetching habit progress:", error)
+        )
     }
   }, [habit_id])
 
@@ -34,6 +57,24 @@ const HabitPage = () => {
   const markAsComplete = () => {
     setCompletedDays([...completedDays, currentDay])
     setCurrentDay((prevDay) => prevDay + 1)
+
+    fetch(`http://localhost:8000/dailyassist/update_habit_progress/`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        user_id: user_id,
+        habit_id: habit_id,
+        last_completed_day: currentDay,
+      }),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Failed to mark as complete")
+        }
+      })
+      .catch((error) => console.error("Error marking as complete:", error))
   }
 
   const isDayCompleted = (index) => {

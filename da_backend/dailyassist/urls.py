@@ -18,5 +18,8 @@ urlpatterns = [
     path('view_habit_details/<int:habit_id>/', views.view_habit_details, name='view_habit_details'),
     path('list_habits/', views.list_habits, name='list_habits'),
     path('submit_survey/', views.submit_survey, name='submit_survey'),
+    path('view_habit_progress/', views.view_habit_progress, name='view_habit_progress'),
+    path('update_habit_progress/', views.update_habit_progress, name='update_habit_progress'),
+
 
 ]

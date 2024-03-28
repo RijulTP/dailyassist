@@ -1,0 +1,7 @@
+POST
+http://127.0.0.1:8000/dailyassist/view_habit_progress/
+
+{
+    "user_id":1,
+    "habit_id": 2,
+}
