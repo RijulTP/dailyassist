@@ -11,6 +11,12 @@ export default function TaskManager() {
     fetchTaskSetId()
   }, [])
 
+  useEffect(() => {
+    if (taskSetId) {
+      fetchTasks(taskSetId) // Fetches tasks after the task is set
+    }
+  }, [taskSetId])
+
   const fetchTaskSetId = async () => {
     try {
       const response = await fetch(
@@ -35,12 +41,6 @@ export default function TaskManager() {
       console.error("Error fetching task set ID:", error)
     }
   }
-
-  useEffect(() => {
-    if (taskSetId) {
-      fetchTasks(taskSetId) // Fetches tasks after the task is set
-    }
-  }, [taskSetId])
 
   const fetchTasks = async (taskSetId) => {
     try {
@@ -160,8 +160,29 @@ export default function TaskManager() {
     return `${year}-${month}-${day}`
   }
 
+  // Calculate the percentage of completed tasks
+  const completedTasksCount = tasks.filter(
+    (task) => task.task_status === "completed"
+  ).length
+  const totalTasksCount = tasks.length
+  const progressPercentage =
+    totalTasksCount === 0 ? 0 : (completedTasksCount / totalTasksCount) * 100
+
   return (
     <div className="task-manager p-4">
+      <div className="relative mb-10">
+        <div className="flex flex-col text-center justify-center">
+          <span className="p-1 text-center font-bold">Tasks done</span>
+        </div>
+        <div className="overflow-hidden h-8 text-lg flex rounded bg-gray-500">
+          <div
+            style={{ width: `${progressPercentage}%` }}
+            className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-gradient-to-r from-green-300 to-green-400 animate-slidein"
+          >
+            <span className="p-1 text-center font-bold">{`${progressPercentage}%`}</span>
+          </div>
+        </div>
+      </div>
       <form onSubmit={addTask} className="mb-4 flex">
         <input
           type="text"
@@ -191,7 +212,6 @@ export default function TaskManager() {
               <button
                 onClick={() => toggleComplete(task.task_id, task.task_status)}
                 className={`mr-2 px-4 py-2 bg-green-500 text-white font-bold rounded-md`}
-                // disabled={task.task_status==="completed"}
               >
                 {task.task_status === "completed"
                   ? "Mark Incomplete"
