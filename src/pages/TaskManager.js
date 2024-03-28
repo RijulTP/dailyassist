@@ -81,7 +81,7 @@ export default function TaskManager() {
         throw new Error("Failed to add task")
       }
       setNewTask("")
-      fetchTaskSetId() // Refresh task set ID after adding a new task
+      fetchTasks(taskSetId) // Refresh task set ID after adding a new task
     } catch (error) {
       console.error("Error adding task:", error)
     }
@@ -166,7 +166,9 @@ export default function TaskManager() {
   ).length
   const totalTasksCount = tasks.length
   const progressPercentage =
-    totalTasksCount === 0 ? 0 : (completedTasksCount / totalTasksCount) * 100
+    totalTasksCount === 0
+      ? 0
+      : ((completedTasksCount / totalTasksCount) * 100).toFixed(2)
 
   return (
     <div className="task-manager p-4">
