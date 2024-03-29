@@ -177,6 +177,15 @@ const DailyAnalysisPage = () => {
     setIsLoading(false)
   }, [])
 
+  const completedTasksCount = tasks.filter(
+    (task) => task.task_status === "completed"
+  ).length
+  const totalTasksCount = tasks.length
+  const progressPercentage =
+    totalTasksCount === 0
+      ? 0
+      : ((completedTasksCount / totalTasksCount) * 100).toFixed(2)
+
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100">
       <h1 className="text-3xl font-bold mb-8">Daily Analysis Page</h1>
@@ -193,10 +202,10 @@ const DailyAnalysisPage = () => {
           <div className="flex-1 bg-gray-200 h-6 rounded-full relative overflow-hidden">
             <div
               className="bg-blue-500 h-6 rounded-full absolute top-0 left-0 transition-all duration-500 ease-in-out"
-              style={{ width: "75%" }} // Set width dynamically based on progress percentage
+              style={{ width: `${progressPercentage}%` }} // Set width dynamically based on progress percentage
             ></div>
             <p className="absolute top-0 right-0 mr-2 text-sm text-gray-600">
-              75%
+              `{progressPercentage}%`
             </p>
           </div>
         </div>

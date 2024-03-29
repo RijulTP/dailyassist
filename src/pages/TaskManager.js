@@ -176,13 +176,14 @@ export default function TaskManager() {
         <div className="flex flex-col text-center justify-center">
           <span className="p-1 text-center font-bold">Tasks done</span>
         </div>
-        <div className="overflow-hidden h-8 text-lg flex rounded bg-gray-500">
+        <div className="flex-1 bg-gray-200 h-6 rounded-full relative overflow-hidden">
           <div
-            style={{ width: `${progressPercentage}%` }}
-            className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-gradient-to-r from-green-300 to-green-400 animate-slidein"
-          >
-            <span className="p-1 text-center font-bold">{`${progressPercentage}%`}</span>
-          </div>
+            className="bg-blue-500 h-6 rounded-full absolute top-0 left-0 transition-all duration-500 ease-in-out"
+            style={{ width: `${progressPercentage}%` }} // Set width dynamically based on progress percentage
+          ></div>
+          <p className="absolute top-0 right-0 mr-2 text-sm text-gray-600">
+            `{progressPercentage}%`
+          </p>
         </div>
       </div>
       <form onSubmit={addTask} className="mb-4 flex">
