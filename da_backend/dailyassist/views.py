@@ -26,6 +26,23 @@ def get_task_set_id(date_of_task, user_id):
         return task_set_id[0] if task_set_id else None
     
 
+def get_task_dates(request,user_id):
+    if request.method == 'GET':
+        if not user_id:
+            return JsonResponse({'error': 'User ID is required'}, status=400)
+
+        with connection.cursor() as cursor:
+            cursor.execute("""
+                SELECT DISTINCT date_of_task
+                FROM task_set 
+                WHERE user_id = %s
+            """, [user_id])
+            task_dates = [row[0] for row in cursor.fetchall()]
+
+        return JsonResponse({'task_dates': task_dates})
+
+    return JsonResponse({'error': 'Invalid request method'}, status=405)
+
 
 def get_task_set_id_api(request):
     try:

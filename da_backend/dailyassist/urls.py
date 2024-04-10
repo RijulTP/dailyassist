@@ -23,5 +23,5 @@ urlpatterns = [
     path('view_habit_percentages/', views.view_habit_percentages, name='view_habit_percentages'),
     path('view_survey_results/', views.view_survey_results, name='fetch_survey_results'),
     path('view_all_survey_results/', views.view_all_survey_results, name='view_all_survey_results'),
-
+    path('get_task_dates/<int:user_id>/', views.get_task_dates, name='get_task_dates'),
 ]
