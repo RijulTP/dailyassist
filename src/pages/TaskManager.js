@@ -8,7 +8,16 @@ export default function TaskManager() {
   const [taskSetId, setTaskSetId] = useState(null)
   const [newTask, setNewTask] = useState("")
   const [selectedDate, setSelectedDate] = useState(new Date())
-
+  const [isToday, setIsToday] = useState(true)
+  useEffect(()=>{
+    let today = new Date();
+    if (selectedDate.toDateString() === today.toDateString()) {
+      setIsToday(true)
+    }
+    else{
+      setIsToday(false)
+    }
+  },[selectedDate])
   useEffect(() => {
     fetchTaskSetId(selectedDate)
   }, [selectedDate])
@@ -92,6 +101,7 @@ export default function TaskManager() {
         throw new Error("Failed to add task")
       }
       setNewTask("")
+      fetchTaskSetId(selectedDate)
       fetchTasks(taskSetId, selectedDate)
     } catch (error) {
       console.error("Error adding task:", error)
@@ -227,7 +237,7 @@ export default function TaskManager() {
           {">"}
         </button>
       </div>
-      {taskSetId ? (
+      {(taskSetId || isToday) ? (
         <>
           <form onSubmit={addTask} className="mb-4 flex">
             <input
