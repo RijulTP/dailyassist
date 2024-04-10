@@ -6,11 +6,20 @@ import { useEffect, useState } from "react"
 import { useMediaQuery } from "react-responsive" // Import useMediaQuery
 import { Provider } from "react-redux"
 import store from "../redux/store"
+import Head from "next/head";
+
+import { createGlobalStyle } from "styled-components";
+import { config, dom } from "@fortawesome/fontawesome-svg-core";
 
 export default function MyApp({ Component, pageProps }) {
   const router = useRouter()
   const [sidebarVisible, setSidebarVisible] = useState(true)
   const isMobile = useMediaQuery({ maxWidth: 768 }) // Define a max width for mobile devices
+
+  config.autoAddCss = false;
+  const GlobalStyles = createGlobalStyle`
+      ${dom.css()}
+  `;
 
   // Check if the current URL is / or /index.html and hide the sidebar if it's the login route
   useEffect(() => {
@@ -27,6 +36,10 @@ export default function MyApp({ Component, pageProps }) {
 
   return (
     <Provider store={store}>
+      <Head>
+        <link rel="manifest" href="/manifest.json" />
+      </Head>
+      <GlobalStyles/>
       <Layout sidebarVisible={sidebarVisible}>
         <Component {...pageProps} />
       </Layout>
