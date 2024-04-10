@@ -171,10 +171,16 @@ export default function TaskManager() {
   }
 
   const handleNextDate = () => {
-    let nextDate = new Date(selectedDate)
-    nextDate.setDate(nextDate.getDate() + 1)
-    setSelectedDate(nextDate)
-  }
+    let nextDate = new Date(selectedDate);
+    let today = new Date();
+    if (nextDate.toDateString() === today.toDateString()) {
+      // Selected date is today's date, do not advance
+      return;
+    }
+    nextDate.setDate(nextDate.getDate() + 1);
+    setSelectedDate(nextDate);
+  };
+  
 
   const completedTasksCount = tasks.filter(
     (task) => task.task_status === "completed"
