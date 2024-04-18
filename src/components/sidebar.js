@@ -20,6 +20,7 @@ import {
   faTable,
   faUser,
   faWrench,
+  faLock
 } from "@fortawesome/free-solid-svg-icons"
 import { useRouter } from "next/router"
 import { useSelector } from "react-redux"
@@ -87,6 +88,14 @@ export default function MainSidebar({ children }) {
             {" "}
             Life Navigator Bot
           </MenuItem>
+          <MenuItem
+            icon={<FontAwesomeIcon icon={faLock} />}
+            onClick={() => router.push("/AdminPage")}
+          >
+            {" "}
+            Admin Page
+          </MenuItem>
+
           <br />
           <br />
           <br />

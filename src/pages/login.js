@@ -29,31 +29,31 @@ export default function Home() {
   const router = useRouter()
   const dispatch = useDispatch()
   const handleLogin = async () => {
-    router.push("/DAHomePage")
+    // router.push("/DAHomePage")
     try {
-      const response = await fetch(`http://localhost:8000/login`, {
+      const response = await fetch(`http://localhost:8000/dailyassist/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ user_id: username, password: password }),
+        body: JSON.stringify({ username: username, password: password }),
       })
 
-      if (response.ok) {
-        // success({
-        //   text: "Login successful",
-        //   delay: 1000,
-        // })
+      const data = await response.json() // Parse the JSON response
+
+      if (data.success) {
+        // Check for success field in the response
+        // Login successful
         dispatch(updateLoggedInUser(username))
         router.push("/DAHomePage")
       } else {
-        // Handle login error
-        // info({
-        //   text: "Login Failed",
-        //   delay: 1000,
-        // })
-        console.log("Invalid login information")
-        //setAlert({ type: "failed", message: "Login Failed" })
+        // Login failed
+        console.log(
+          "Login failed:",
+          data.message || "Login failed (no message provided)"
+        )
+        // Handle login error display (consider using a state variable for the alert)
+        // setAlert({ type: "failed", message: data.message || "Login failed" }); // Example using state
       }
     } catch (error) {
       console.error("An error occurred:", error)

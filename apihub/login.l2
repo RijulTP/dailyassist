@@ -1,6 +1,15 @@
+//POST
+//http://127.0.0.1:8000/dailyassist/login
+//{
+ //   "username": "jack",
+  //  "password": "jack123"
+//}
+
+---
+
 POST
-http://127.0.0.1:8000/login
+http://127.0.0.1:8000/dailyassist/login
 {
-    "user_id": "jack",
-    "password": "abcd"
+    "username": "richard",
+    "password": "123"
 }

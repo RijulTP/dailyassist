@@ -14,6 +14,70 @@ from django.db import connection
 
     
 
+def login(request):
+    if request.method == "POST":
+        result = json.loads(request.body)
+        print(result)
+        username = result["username"]
+        password = result["password"]
+        with connection.cursor() as cursor:
+            cursor.execute(
+                "SELECT password FROM users WHERE username = %s", (username,)
+            )
+            user_data = cursor.fetchone()
+
+        if user_data is not None:
+            stored_password = user_data[0]
+            if stored_password == password:
+                print("Login successful for user:", username)
+                return JsonResponse({"success": True, "message": "User logged in successfully"})
+            else:
+                print("Incorrect password for user:", username)
+                return JsonResponse({"success": False,"message": "Login failed, incorrect password"})
+        else:
+            return JsonResponse({"success": False,"message": "Login failed, username not found"})
+
+
+def addUser(request):
+    if request.method == "POST":
+        result = json.loads(request.body)
+        print(result)
+        username = result["username"]
+        password = result["password"]
+        user_type = result["user_type"]
+
+        try:
+            query = f"""
+                    INSERT into users(username,password,user_type) VALUES('{username}','{password}','{user_type}')                
+            """
+
+            with connection.cursor() as cursor:
+                 cursor.execute(query)
+            return JsonResponse(
+                {"message": "User added successfully", "user_type": user_type}
+            )
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=400)
+        
+
+def view_users(request):
+    if request.method == "GET":
+        try:
+            with connection.cursor() as cursor:
+                cursor.execute("SELECT username, user_type FROM users")
+                user_data = cursor.fetchall()
+
+            users = []
+            for user in user_data:
+                users.append({"username": user[0], "user_type": user[1]})
+
+            return JsonResponse(users, safe=False)  # Allow non-primitive data types
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=400)
+    else:
+        return JsonResponse({"message": "Invalid request method"}, status=405)
+
+
 def get_task_set_id(date_of_task, user_id):
     with connection.cursor() as cursor:
         cursor.execute("""

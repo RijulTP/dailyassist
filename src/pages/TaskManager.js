@@ -187,6 +187,7 @@ export default function TaskManager() {
       // Selected date is today's date, do not advance
       return;
     }
+    setTasks([])
     nextDate.setDate(nextDate.getDate() + 1);
     setSelectedDate(nextDate);
   };

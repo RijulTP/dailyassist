@@ -24,4 +24,8 @@ urlpatterns = [
     path('view_survey_results/', views.view_survey_results, name='fetch_survey_results'),
     path('view_all_survey_results/', views.view_all_survey_results, name='view_all_survey_results'),
     path('get_task_dates/<int:user_id>/', views.get_task_dates, name='get_task_dates'),
+    path('add_user', views.addUser, name='addUser'),
+    path('login', views.login, name='login'),
+    path('view_users', views.view_users, name='login'),
+
 ]

@@ -1,0 +1,7 @@
+POST
+http://0.0.0.0:8000/dailyassist/add_user
+{
+  "username": "richard",
+  "password": "123",
+  "user_type": "user"
+}
