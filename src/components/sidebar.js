@@ -1,5 +1,5 @@
 import "./globals.css"
-import React from "react"
+import React, { useEffect } from "react"
 import {
   Sidebar,
   Menu,
@@ -20,7 +20,7 @@ import {
   faTable,
   faUser,
   faWrench,
-  faLock
+  faLock,
 } from "@fortawesome/free-solid-svg-icons"
 import { useRouter } from "next/router"
 import { useSelector } from "react-redux"
@@ -28,7 +28,13 @@ import { useSelector } from "react-redux"
 export default function MainSidebar({ children }) {
   const router = useRouter()
   const [collapsed, setCollapsed] = React.useState(false)
-  const loggedinuser = useSelector((state) => state.loggedinuser.value)
+  const loggedInUser = useSelector((state) => state.auth.loggedInUser)
+  useEffect(() => {
+    console.log("The loggedin user value at sidebar is", loggedInUser)
+  }, [loggedInUser])
+
+  
+
   return (
     <div style={{ display: "flex", width: "250px" }}>
       <Sidebar collapsed={collapsed} backgroundColor="rgba(24, 17, 41, 0.95)">
@@ -95,40 +101,9 @@ export default function MainSidebar({ children }) {
             {" "}
             Admin Page
           </MenuItem>
-
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          {/* <MenuItem
-              icon={<FontAwesomeIcon icon={faUser} />}
-            >
-              {loggedinuser}
-            </MenuItem> */}
+          <MenuItem className="mt-auto" icon={<FontAwesomeIcon icon={faUser} />}>
+            {loggedInUser}
+          </MenuItem>
         </Menu>
       </Sidebar>
     </div>
