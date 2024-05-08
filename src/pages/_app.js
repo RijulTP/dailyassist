@@ -7,6 +7,7 @@ import { useMediaQuery } from "react-responsive" // Import useMediaQuery
 import { Provider } from "react-redux"
 import store from "../redux/store"
 import Head from "next/head"
+import ParticlesComponent from "@/components/particles"
 
 import { createGlobalStyle } from "styled-components"
 import { config, dom } from "@fortawesome/fontawesome-svg-core"
@@ -34,8 +35,6 @@ export default function MyApp({ Component, pageProps }) {
     }
   }, [router, isMobile])
 
-  
-
   return (
     <Provider store={store}>
       <Head>
@@ -43,6 +42,7 @@ export default function MyApp({ Component, pageProps }) {
       </Head>
       <GlobalStyles />
       <Layout sidebarVisible={sidebarVisible}>
+        {/* <ParticlesComponent /> */}
         <Component {...pageProps} />
       </Layout>
     </Provider>
