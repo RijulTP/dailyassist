@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"
-import UserList from "./UserList"
+import UserList from "../components/UserList"
 
 
 const HOST_LOCAL = "http://localhost:8000"
