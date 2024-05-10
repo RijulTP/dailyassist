@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react"
 import UserList from "./UserList"
 
+
+const HOST_LOCAL = "http://localhost:8000"
+const HOST_PROD = "https://dailyassist-backend.vercel.app"
+
 const AdminPage = () => {
   const [users, setUsers] = useState([])
   const [isLoading, setIsLoading] = useState(false)
@@ -11,7 +15,7 @@ const AdminPage = () => {
     const fetchUsers = async () => {
       setIsLoading(true)
       try {
-        const response = await fetch("http://127.0.0.1:8000/dailyassist/view_users") // Replace with your API endpoint
+        const response = await fetch(`${HOST_PROD}/dailyassist/view_users`) // Replace with your API endpoint
         const data = await response.json()
         setUsers(data)
       } catch (err) {

@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from "react"
 import Link from "next/link"
 
+const HOST_LOCAL = "http://localhost:8000"
+const HOST_PROD = "https://dailyassist-backend.vercel.app"
+
 const SurveyStart = () => {
   const [surveys, setSurveys] = useState([])
 
   useEffect(() => {
-    fetch("http://localhost:8000/dailyassist/view_survey_list/")
+    fetch(`${HOST_PROD}/dailyassist/view_survey_list/`)
       .then((response) => response.json())
       .then((data) => {
         setSurveys(data.surveys)

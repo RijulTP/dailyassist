@@ -3,6 +3,9 @@ import SurveyQuestion from "./SurveyQuestion"
 import { useSearchParams } from "next/navigation"
 import { useRouter } from "next/router"
 
+const HOST_LOCAL = "http://localhost:8000"
+const HOST_PROD = "https://dailyassist-backend.vercel.app"
+
 const REQUIRED = "*required"
 
 export default function SurveyPage() {
@@ -24,7 +27,7 @@ export default function SurveyPage() {
   useEffect(() => {
     if (survey_id) {
       // Fetch survey details from the API
-      fetch(`http://localhost:8000/dailyassist/view_survey_details/`, {
+      fetch(`${HOST_PROD}/dailyassist/view_survey_details/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -59,7 +62,7 @@ export default function SurveyPage() {
 
   const handleSubmit = () => {
     // Send answers to API
-    fetch("http://localhost:8000/dailyassist/submit_survey/", {
+    fetch(`${HOST_PROD}/dailyassist/submit_survey/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

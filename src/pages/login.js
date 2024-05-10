@@ -7,6 +7,9 @@ import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons"
 import { setLoggedInUser, setUserId, setLoginStatus } from "../redux/authSlice" // Import actions
 import { useSelector } from "react-redux"
 
+const HOST_LOCAL = "http://localhost:8000"
+const HOST_PROD = "https://dailyassist-backend.vercel.app"
+
 export default function Login() {
   const dispatch = useDispatch()
   const [username, setUsername] = useState("")
@@ -20,7 +23,7 @@ export default function Login() {
 
   const handleLogin = async () => {
     try {
-      const response = await fetch(`http://localhost:8000/dailyassist/login`, {
+      const response = await fetch(`${HOST_PROD}/dailyassist/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

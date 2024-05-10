@@ -67,7 +67,7 @@ CREATE TABLE `habit_progress` (
 
 LOCK TABLES `habit_progress` WRITE;
 /*!40000 ALTER TABLE `habit_progress` DISABLE KEYS */;
-INSERT INTO `habit_progress` VALUES (7,1,1,6),(8,1,2,3),(9,1,3,1),(10,1,7,0),(11,1,6,0);
+INSERT INTO `habit_progress` VALUES (7,1,1,9),(8,1,2,3),(9,1,3,1),(10,1,7,0),(11,1,6,0);
 /*!40000 ALTER TABLE `habit_progress` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -197,7 +197,7 @@ CREATE TABLE `survey_result` (
   PRIMARY KEY (`result_id`),
   KEY `survey_id` (`survey_id`),
   CONSTRAINT `survey_result_ibfk_1` FOREIGN KEY (`survey_id`) REFERENCES `surveys` (`survey_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -206,7 +206,7 @@ CREATE TABLE `survey_result` (
 
 LOCK TABLES `survey_result` WRITE;
 /*!40000 ALTER TABLE `survey_result` DISABLE KEYS */;
-INSERT INTO `survey_result` VALUES (1,2,17,'{\"1\": \"Yes\", \"2\": \"No\", \"3\": \"Maybe\", \"4\": \"Yes\", \"5\": \"No\"}','2024-03-20'),(3,1,17,'{\"1\": \"Good\", \"2\": \"Daily\", \"3\": 2, \"4\": \"Vegan\", \"5\": 4, \"6\": \"6-7 hours\", \"7\": \"No, never\", \"8\": \"Very dissatisfied\", \"9\": \"Never\", \"10\": 5}','2024-03-20'),(7,1,17,'{\"1\": \"Its good\", \"2\": \"Several times a week\", \"3\": 5, \"4\": \"Omnivore\", \"5\": 4, \"6\": \"5-6 hours\", \"7\": \"Sometimes\", \"8\": \"Neutral\", \"9\": \"Several times a week\", \"10\": 4}','2024-03-28'),(8,1,18,'{\"1\": \"Yes\", \"2\": \"Yes\", \"3\": 3, \"4\": 2, \"5\": \"Yes\", \"6\": 5, \"7\": \"No\", \"8\": \"Yes\", \"9\": \"No\", \"10\": 4}','2024-03-28'),(9,1,19,'{\"1\": \"Based on the urgency\", \"2\": \"To-do list app\", \"3\": 4, \"4\": \"Try to avoid as much as possible\", \"5\": \"Rarely\", \"6\": 5, \"7\": \"Current work environment is at home\", \"8\": \"Checklists\", \"9\": 5, \"10\": \"I need to get more tasks done per day\"}','2024-04-04');
+INSERT INTO `survey_result` VALUES (1,2,17,'{\"1\": \"Yes\", \"2\": \"No\", \"3\": \"Maybe\", \"4\": \"Yes\", \"5\": \"No\"}','2024-03-20'),(3,1,17,'{\"1\": \"Good\", \"2\": \"Daily\", \"3\": 2, \"4\": \"Vegan\", \"5\": 4, \"6\": \"6-7 hours\", \"7\": \"No, never\", \"8\": \"Very dissatisfied\", \"9\": \"Never\", \"10\": 5}','2024-03-20'),(7,1,17,'{\"1\": \"Its good\", \"2\": \"Several times a week\", \"3\": 5, \"4\": \"Omnivore\", \"5\": 4, \"6\": \"5-6 hours\", \"7\": \"Sometimes\", \"8\": \"Neutral\", \"9\": \"Several times a week\", \"10\": 4}','2024-03-28'),(8,1,18,'{\"1\": \"Yes\", \"2\": \"Yes\", \"3\": 3, \"4\": 2, \"5\": \"Yes\", \"6\": 5, \"7\": \"No\", \"8\": \"Yes\", \"9\": \"No\", \"10\": 4}','2024-03-28'),(9,1,19,'{\"1\": \"Based on the urgency\", \"2\": \"To-do list app\", \"3\": 4, \"4\": \"Try to avoid as much as possible\", \"5\": \"Rarely\", \"6\": 5, \"7\": \"Current work environment is at home\", \"8\": \"Checklists\", \"9\": 5, \"10\": \"I need to get more tasks done per day\"}','2024-04-04'),(10,1,17,'{\"1\": \"\", \"2\": \"Once a week\", \"3\": 4, \"4\": \"Omnivore\", \"5\": 5, \"6\": \"Less than 5 hours\", \"7\": \"No, never\", \"8\": \"Neutral\", \"9\": \"Several times a week\", \"10\": 5}','2024-04-05'),(11,1,17,'{\"1\": \"Good mood\", \"2\": \"Once a week\", \"3\": 4, \"4\": \"Vegetarian\", \"5\": 5, \"6\": \"Less than 5 hours\", \"7\": \"Sometimes\", \"8\": \"Neutral\", \"9\": \"Rarely\", \"10\": 5}','2024-05-02'),(12,1,17,'{\"1\": \"dfafgg\", \"2\": \"Rarely\", \"3\": 3, \"4\": \"Vegan\"}','2024-05-08'),(13,1,17,'{\"1\": \"gfgjy\", \"3\": 4}','2024-05-08'),(14,1,17,'{\"1\": \"gfgjy\", \"3\": 4}','2024-05-08');
 /*!40000 ALTER TABLE `survey_result` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -247,7 +247,7 @@ CREATE TABLE `task_set` (
   `user_id` int NOT NULL,
   `date_of_task` date NOT NULL,
   PRIMARY KEY (`task_set_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -256,7 +256,7 @@ CREATE TABLE `task_set` (
 
 LOCK TABLES `task_set` WRITE;
 /*!40000 ALTER TABLE `task_set` DISABLE KEYS */;
-INSERT INTO `task_set` VALUES (1,1,'2024-02-22'),(2,1,'2024-02-26'),(3,1,'2024-03-01'),(4,1,'2024-03-20'),(5,1,'2024-03-28'),(6,1,'2024-03-29'),(7,1,'2024-04-02'),(8,1,'2024-04-04');
+INSERT INTO `task_set` VALUES (1,1,'2024-02-22'),(2,1,'2024-02-26'),(3,1,'2024-03-01'),(4,1,'2024-03-20'),(5,1,'2024-03-28'),(6,1,'2024-03-29'),(7,1,'2024-04-02'),(8,1,'2024-04-04'),(9,1,'2024-04-05'),(10,1,'2024-04-10'),(11,2,'2024-04-10'),(12,2,'2024-04-08'),(13,2,'2024-04-07'),(14,2,'2024-03-31'),(15,1,'2024-04-11'),(16,1,'2024-05-02'),(17,1,'2024-05-07'),(18,1,'2024-05-08');
 /*!40000 ALTER TABLE `task_set` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -275,7 +275,7 @@ CREATE TABLE `tasks` (
   PRIMARY KEY (`task_id`),
   KEY `task_set_id` (`task_set_id`),
   CONSTRAINT `tasks_ibfk_1` FOREIGN KEY (`task_set_id`) REFERENCES `task_set` (`task_set_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=72 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -284,8 +284,34 @@ CREATE TABLE `tasks` (
 
 LOCK TABLES `tasks` WRITE;
 /*!40000 ALTER TABLE `tasks` DISABLE KEYS */;
-INSERT INTO `tasks` VALUES (10,2,'Hey there','Pending'),(11,3,'Do todays Homework','completed'),(12,3,'Get the journals','Pending'),(14,3,'Watch a movie','Pending'),(15,4,'Do Hw','completed'),(16,4,'Study for viva','completed'),(18,5,'Get habit component API integration working','completed'),(24,5,'Get the task manager phase 4 done','completed'),(25,5,'Try to host django for free','Pending'),(26,5,'Try to host your database for free','Pending'),(27,6,'Get the advice component done','Pending'),(28,6,'Complete the rough designs for LMS','completed'),(29,7,'Do Laundry','completed'),(30,7,'Complete CGIP Assignment','completed'),(31,7,'Research on stable diffusion','Pending'),(32,7,'Submit a post on Hackernews','completed'),(33,7,'Create a new form for mulearn','Pending'),(34,7,'Complete feedback form','completed'),(35,8,'Do Miniproject','pending'),(36,8,'Do project diary','pending'),(37,8,'Submit file','pending');
+INSERT INTO `tasks` VALUES (10,2,'Hey there','Pending'),(11,3,'Do todays Homework','completed'),(12,3,'Get the journals','Pending'),(14,3,'Watch a movie','Pending'),(15,4,'Do Hw','completed'),(16,4,'Study for viva','completed'),(18,5,'Get habit component API integration working','completed'),(24,5,'Get the task manager phase 4 done','completed'),(25,5,'Try to host django for free','Pending'),(26,5,'Try to host your database for free','Pending'),(27,6,'Get the advice component done','Pending'),(28,6,'Complete the rough designs for LMS','completed'),(29,7,'Do Laundry','completed'),(30,7,'Complete CGIP Assignment','completed'),(31,7,'Research on stable diffusion','Pending'),(32,7,'Submit a post on Hackernews','completed'),(33,7,'Create a new form for mulearn','Pending'),(34,7,'Complete feedback form','completed'),(35,8,'Do Miniproject','completed'),(36,8,'Do project diary','completed'),(37,8,'Submit file','completed'),(39,8,'Research on stable diffusion','completed'),(40,8,'Collect Mumbai Numbers','completed'),(41,8,'Research on story writing ','Pending'),(42,8,'Hackernews post','completed'),(43,9,'Do Homework','completed'),(44,9,'Complete Tutorial 4','completed'),(45,9,'Pack bags','completed'),(46,9,'Submit File','completed'),(47,10,'CGIP Tutorial','completed'),(48,10,'Compiler design tutorial','completed'),(49,10,'Task manager progress','completed'),(50,10,'Collect numbers','completed'),(51,10,'Read Rickover','completed'),(52,10,'Create a heroku account and host Backend','completed'),(53,10,'CGIP Tutorial 2','completed'),(54,10,'Drink water','completed'),(55,10,'Create react app prompt','completed'),(60,13,'hi','Pending'),(61,14,'hi','Pending'),(63,15,'do hw','Pending'),(64,16,'Do homework','completed'),(65,17,'Hello','Pending'),(66,17,'Hey','Pending'),(67,18,'Do Hw','completed'),(68,18,'Complete assignment','completed'),(69,18,'Talk to Nived','completed'),(71,18,'ggffg','Pending');
 /*!40000 ALTER TABLE `tasks` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `users`
+--
+
+DROP TABLE IF EXISTS `users`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `users` (
+  `user_id` int NOT NULL AUTO_INCREMENT,
+  `username` varchar(50) NOT NULL,
+  `password` varchar(50) NOT NULL,
+  `user_type` varchar(50) NOT NULL,
+  PRIMARY KEY (`user_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `users`
+--
+
+LOCK TABLES `users` WRITE;
+/*!40000 ALTER TABLE `users` DISABLE KEYS */;
+INSERT INTO `users` VALUES (1,'jack','jack123','admin'),(2,'richard','123','user');
+/*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -297,4 +323,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-04-04 14:24:29
+-- Dump completed on 2024-05-11  0:30:00

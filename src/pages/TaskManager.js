@@ -3,6 +3,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons';
 const USER_ID = 1
 
+const HOST_LOCAL = "http://localhost:8000"
+const HOST_PROD = "https://dailyassist-backend.vercel.app"
+
 export default function TaskManager() {
   const [tasks, setTasks] = useState([])
   const [taskSetId, setTaskSetId] = useState(null)
@@ -31,7 +34,7 @@ export default function TaskManager() {
   const fetchTaskSetId = async (date) => {
     try {
       const response = await fetch(
-        "http://127.0.0.1:8000/dailyassist/get_task_set_id/",
+        `${HOST_PROD}/dailyassist/get_task_set_id/`,
         {
           method: "POST",
           headers: {
@@ -56,7 +59,7 @@ export default function TaskManager() {
   const fetchTasks = async (taskSetId, date) => {
     try {
       const response = await fetch(
-        `http://127.0.0.1:8000/dailyassist/retrievetask/${taskSetId}/`,
+        `${HOST_PROD}/dailyassist/retrievetask/${taskSetId}/`,
         {
           method: "POST",
           headers: {
@@ -83,7 +86,7 @@ export default function TaskManager() {
 
     try {
       const response = await fetch(
-        "http://127.0.0.1:8000/dailyassist/storetask/",
+        `${HOST_PROD}/dailyassist/storetask/`,
         {
           method: "POST",
           headers: {
@@ -111,7 +114,7 @@ export default function TaskManager() {
   const deleteTask = async (taskId) => {
     try {
       const response = await fetch(
-        `http://127.0.0.1:8000/dailyassist/deletetask/`,
+        `${HOST_PROD}/dailyassist/deletetask/`,
         {
           method: "POST",
           headers: {
@@ -136,7 +139,7 @@ export default function TaskManager() {
       const newTaskStatus =
         currentTaskStatus === "completed" ? "pending" : "completed"
       const response = await fetch(
-        "http://127.0.0.1:8000/dailyassist/update_task_status/",
+        `${HOST_PROD}/dailyassist/update_task_status/`,
         {
           method: "POST",
           headers: {
@@ -154,7 +157,7 @@ export default function TaskManager() {
       }
 
       const updatedTaskResponse = await fetch(
-        `http://127.0.0.1:8000/dailyassist/retrievetask/${taskSetId}/`
+        `${HOST_PROD}/dailyassist/retrievetask/${taskSetId}/`
       )
       if (!updatedTaskResponse.ok) {
         throw new Error("Failed to fetch updated task data")

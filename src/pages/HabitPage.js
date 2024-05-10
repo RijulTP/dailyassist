@@ -3,6 +3,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faCheck, faClock } from "@fortawesome/free-solid-svg-icons"
 import { useSearchParams } from "next/navigation"
 
+const HOST_LOCAL = "http://localhost:8000"
+const HOST_PROD = "https://dailyassist-backend.vercel.app"
+
 const user_id = 1
 
 const HabitPage = () => {
@@ -16,14 +19,14 @@ const HabitPage = () => {
 
   useEffect(() => {
     if (habit_id) {
-      fetch(`http://localhost:8000/dailyassist/view_habit_details/${habit_id}/`)
+      fetch(`${HOST_PROD}/dailyassist/view_habit_details/${habit_id}/`)
         .then((response) => response.json())
         .then((data) => {
           setHabitDetails(data)
         })
         .catch((error) => console.error("Error fetching habit details:", error))
 
-      fetch(`http://localhost:8000/dailyassist/view_habit_progress/`, {
+      fetch(`${HOST_PROD}/dailyassist/view_habit_progress/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -58,7 +61,7 @@ const HabitPage = () => {
     setCompletedDays([...completedDays, currentDay])
     setCurrentDay((prevDay) => prevDay + 1)
 
-    fetch(`http://localhost:8000/dailyassist/update_habit_progress/`, {
+    fetch(`${HOST_PROD}/dailyassist/update_habit_progress/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

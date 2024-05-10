@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react"
 import { GoogleGenerativeAI } from "@google/generative-ai"
 import ReactMarkdown from "react-markdown"
 
+const HOST_LOCAL = "http://localhost:8000"
+const HOST_PROD = "https://dailyassist-backend.vercel.app"
+
 const USER_ID = 1
 const API_KEY = "AIzaSyBmrOh1cZRZIEtznQSsUTqY13isfsfXCCA"
 const genAI = new GoogleGenerativeAI(API_KEY)
@@ -73,7 +76,7 @@ const DailyAnalysisPage = () => {
   const fetchTaskSetId = async () => {
     try {
       const response = await fetch(
-        "http://127.0.0.1:8000/dailyassist/get_task_set_id/",
+        `${HOST_PROD}/dailyassist/get_task_set_id/`,
         {
           method: "POST",
           headers: {
@@ -98,7 +101,7 @@ const DailyAnalysisPage = () => {
   const fetchTasks = async (taskSetId) => {
     try {
       const response = await fetch(
-        `http://127.0.0.1:8000/dailyassist/retrievetask/${taskSetId}/`
+        `${HOST_PROD}/dailyassist/retrievetask/${taskSetId}/`
       )
       if (!response.ok) {
         throw new Error("Failed to fetch tasks")
@@ -115,7 +118,7 @@ const DailyAnalysisPage = () => {
   const fetchHabitData = async () => {
     try {
       const response = await fetch(
-        "http://localhost:8000/dailyassist/view_habit_percentages/",
+        `${HOST_PROD}/dailyassist/view_habit_percentages/`,
         {
           method: "POST",
           headers: {
@@ -137,7 +140,7 @@ const DailyAnalysisPage = () => {
   const fetchSurveyResults = async () => {
     try {
       const response = await fetch(
-        "http://localhost:8000/dailyassist/view_all_survey_results/",
+        `${HOST_PROD}/dailyassist/view_all_survey_results/`,
         {
           method: "POST",
           headers: {
