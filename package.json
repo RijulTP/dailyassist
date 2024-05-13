@@ -19,6 +19,7 @@
     "@google-cloud/text-to-speech": "^5.1.0",
     "@google-cloud/vertexai": "^0.4.0",
     "@google/generative-ai": "^0.2.1",
+    "@netlify/plugin-nextjs": "^5.2.2",
     "@reduxjs/toolkit": "^1.9.7",
     "@tsparticles/react": "^3.0.0",
     "@tsparticles/slim": "^3.3.0",
