@@ -39,3 +39,10 @@ next-env.d.ts
 
 # Ignore Python bytecode cache
 **/__pycache__/
+
+# app
+
+#Local build
+android/**
+*.apks
+*.apk
