@@ -10,6 +10,8 @@ import { useSelector } from "react-redux"
 const HOST_LOCAL = "http://localhost:8000"
 const HOST_PROD = "https://dailyassist-backend.vercel.app"
 
+// const HOST_PROD = "http://localhost:8000"
+
 export default function Login() {
   const dispatch = useDispatch()
   const [username, setUsername] = useState("")
@@ -17,9 +19,15 @@ export default function Login() {
   const loggedInUser = useSelector((state) => state.auth.loggedInUser) // Access username from store
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn) // Access login status
   const userId = useSelector((state) => state.auth.userId) // Access user ID from store
+  const [message, setMessage] = useState('');
+  const [isError, setIsError] = useState(false);
+  const router = useRouter()
+  if(isLoggedIn == true){
+    router.push("/DAHomePage")
+  }
 
   console.log("The redux values are", loggedInUser, isLoggedIn, userId)
-  const router = useRouter()
+
 
   const handleLogin = async () => {
     try {
@@ -51,6 +59,39 @@ export default function Login() {
       console.error("An error occurred:", error)
     }
   }
+
+  const handleRegister = async () => {
+    try {
+      const response = await fetch(`${HOST_PROD}/dailyassist/add_user`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username, password, user_type: "user" }),
+      });
+      const data = await response.json(); // Parse the JSON response
+      if (data.success) {
+        console.log("Registration successful");
+        setMessage("Registration successful");
+        setIsError(false);
+      } else {
+        console.log(
+          "Registration failed:",
+          data.message || "Registration failed"
+        );
+        setMessage("Registration Failed");
+        setIsError(true);
+      }
+    } catch (error) {
+      console.error("An error occurred:", error);
+      setMessage("Registration Failed")
+      setIsError(true);
+    }
+    setTimeout(() => {
+      setMessage('');
+    }, 3000);
+  };
+  
 
   const [showPassword, setShowPassword] = useState(false)
   const passwordInputRef = useRef(null)
@@ -105,13 +146,31 @@ export default function Login() {
             </button>
           </div>
         </div>
-        <button
-          onClick={handleLogin}
-          className="login-button bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-2 px-4 rounded shadow-md w-full md:w-auto"
-        >
-          Login
-        </button>
+        <div className="flex justify-between">
+          <button
+            onClick={handleLogin}
+            className="login-button bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-2 px-4 rounded shadow-md w-full md:w-auto"
+          >
+            Login
+          </button>
+          <button
+            onClick={handleRegister}
+            className="register-button bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded shadow-md w-full md:w-auto"
+          >
+            Register
+          </button>
+        </div>
+        {message && (
+          <div
+            className={`text-center px-4 py-3 mt-10 rounded ${
+              isError ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'
+            }`}
+          >
+            {message}
+          </div>
+        )}
       </div>
+      
     </div>
   )
 }

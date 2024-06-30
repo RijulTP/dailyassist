@@ -4,7 +4,6 @@ import UserList from "../components/UserList"
 
 const HOST_LOCAL = "http://localhost:8000"
 const HOST_PROD = "https://dailyassist-backend.vercel.app"
-
 const AdminPage = () => {
   const [users, setUsers] = useState([])
   const [isLoading, setIsLoading] = useState(false)

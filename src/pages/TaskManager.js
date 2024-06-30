@@ -1,26 +1,154 @@
 import React, { useState, useEffect } from "react"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons';
+import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons"
 const USER_ID = 1
 
 const HOST_LOCAL = "http://localhost:8000"
 const HOST_PROD = "https://dailyassist-backend.vercel.app"
 
+const Timer = () => {
+  const [targetTime, setTargetTime] = useState(null)
+  const [timeRemaining, setTimeRemaining] = useState({
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
+  })
+  const [isActive, setIsActive] = useState(false)
+
+  useEffect(() => {
+    let interval = null
+    if (isActive && targetTime) {
+      interval = setInterval(() => {
+        const now = new Date().getTime()
+        const distance = targetTime - now
+
+        if (distance < 0) {
+          clearInterval(interval)
+          setIsActive(false)
+          setTimeRemaining({ hours: 0, minutes: 0, seconds: 0 })
+        } else {
+          const hours = Math.floor(
+            (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+          )
+          const minutes = Math.floor(
+            (distance % (1000 * 60 * 60)) / (1000 * 60)
+          )
+          const seconds = Math.floor((distance % (1000 * 60)) / 1000)
+          setTimeRemaining({ hours, minutes, seconds })
+        }
+      }, 1000)
+    } else if (!isActive) {
+      clearInterval(interval)
+    }
+    return () => clearInterval(interval)
+  }, [isActive, targetTime])
+
+  const handleStart = () => {
+    if (!targetTime) return
+    setIsActive(true)
+  }
+
+  const handleReset = () => {
+    setIsActive(false)
+    setTargetTime(null)
+    setTimeRemaining({ hours: 0, minutes: 0, seconds: 0 })
+  }
+
+  const handleTimeChange = (e) => {
+    const [hours, minutes] = e.target.value.split(":").map(Number)
+    const now = new Date()
+    const target = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate(),
+      hours,
+      minutes,
+      0,
+      0
+    )
+    setTargetTime(target.getTime())
+  }
+
+  return (
+    <div className="timer flex items-center space-x-2">
+      <input
+        type="time"
+        onChange={handleTimeChange}
+        disabled={isActive}
+        className="p-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs"
+      />
+      {isActive && (
+        <span className="text-xs font-semibold">{`${timeRemaining.hours}:${(
+          "0" + timeRemaining.minutes
+        ).slice(-2)}:${("0" + timeRemaining.seconds).slice(-2)}`}</span>
+      )}
+      {!isActive && (
+        <button
+          onClick={handleStart}
+          className="px-2 py-1 bg-blue-500 text-white font-bold rounded-md text-xs shadow hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+          Start
+        </button>
+      )}
+      {isActive && (
+        <button
+          onClick={handleReset}
+          className="px-2 py-1 bg-gray-500 text-white font-bold rounded-md text-xs shadow hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500"
+        >
+          Reset
+        </button>
+      )}
+    </div>
+  )
+}
+
+const Task = ({ task, toggleComplete, deleteTask }) => {
+  return (
+    <li
+      key={task.id}
+      className="flex items-center justify-between py-4 bg-white shadow-md rounded-lg mb-4 p-4"
+    >
+      <span
+        className={`flex-1 ${
+          task.task_status === "completed" ? "line-through text-gray-500" : ""
+        }`}
+      >
+        {task.task_name}
+      </span>
+      <div className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-2">
+        <Timer />
+        <button
+          onClick={() => toggleComplete(task.task_id, task.task_status)}
+          className="w-full sm:w-auto px-4 py-2 bg-green-500 text-white font-bold rounded-md shadow hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500"
+        >
+          {task.task_status === "completed"
+            ? "Mark Incomplete"
+            : "Mark Complete"}
+        </button>
+        <button
+          onClick={() => deleteTask(task.task_id)}
+          className="w-full sm:w-auto px-4 py-2 bg-red-500 text-white font-bold rounded-md shadow hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500"
+        >
+          Delete
+        </button>
+      </div>
+    </li>
+  )
+}
 export default function TaskManager() {
   const [tasks, setTasks] = useState([])
   const [taskSetId, setTaskSetId] = useState(null)
   const [newTask, setNewTask] = useState("")
   const [selectedDate, setSelectedDate] = useState(new Date())
   const [isToday, setIsToday] = useState(true)
-  useEffect(()=>{
-    let today = new Date();
+  useEffect(() => {
+    let today = new Date()
     if (selectedDate.toDateString() === today.toDateString()) {
       setIsToday(true)
-    }
-    else{
+    } else {
       setIsToday(false)
     }
-  },[selectedDate])
+  }, [selectedDate])
   useEffect(() => {
     fetchTaskSetId(selectedDate)
   }, [selectedDate])
@@ -85,21 +213,18 @@ export default function TaskManager() {
     if (!newTask.trim()) return
 
     try {
-      const response = await fetch(
-        `${HOST_PROD}/dailyassist/storetask/`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            date_of_task: formatDate(selectedDate),
-            user_id: USER_ID,
-            task_name: newTask,
-            task_status: "Pending",
-          }),
-        }
-      )
+      const response = await fetch(`${HOST_PROD}/dailyassist/storetask/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          date_of_task: formatDate(selectedDate),
+          user_id: USER_ID,
+          task_name: newTask,
+          task_status: "Pending",
+        }),
+      })
       if (!response.ok) {
         throw new Error("Failed to add task")
       }
@@ -113,18 +238,15 @@ export default function TaskManager() {
 
   const deleteTask = async (taskId) => {
     try {
-      const response = await fetch(
-        `${HOST_PROD}/dailyassist/deletetask/`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            task_id: taskId,
-          }),
-        }
-      )
+      const response = await fetch(`${HOST_PROD}/dailyassist/deletetask/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          task_id: taskId,
+        }),
+      })
       if (!response.ok) {
         throw new Error("Failed to delete task")
       }
@@ -184,17 +306,16 @@ export default function TaskManager() {
   }
 
   const handleNextDate = () => {
-    let nextDate = new Date(selectedDate);
-    let today = new Date();
+    let nextDate = new Date(selectedDate)
+    let today = new Date()
     if (nextDate.toDateString() === today.toDateString()) {
       // Selected date is today's date, do not advance
-      return;
+      return
     }
     setTasks([])
-    nextDate.setDate(nextDate.getDate() + 1);
-    setSelectedDate(nextDate);
-  };
-  
+    nextDate.setDate(nextDate.getDate() + 1)
+    setSelectedDate(nextDate)
+  }
 
   const completedTasksCount = tasks.filter(
     (task) => task.task_status === "completed"
@@ -241,7 +362,7 @@ export default function TaskManager() {
           {">"}
         </button>
       </div>
-      {(taskSetId || isToday) ? (
+      {taskSetId || isToday ? (
         <>
           <form onSubmit={addTask} className="mb-4 flex">
             <input
@@ -260,36 +381,12 @@ export default function TaskManager() {
           </form>
           <ul>
             {tasks.map((task) => (
-              <li
+              <Task
                 key={task.id}
-                className="flex items-center justify-between py-2"
-              >
-                <span
-                  className={`flex-1 ${
-                    task.task_status === "completed" ? "line-through" : ""
-                  }`}
-                >
-                  {task.task_name}
-                </span>
-                <div>
-                  <button
-                    onClick={() =>
-                      toggleComplete(task.task_id, task.task_status)
-                    }
-                    className={`mr-2 px-4 py-2 bg-green-500 text-white font-bold rounded-md`}
-                  >
-                    {task.task_status === "completed"
-                      ? "Mark Incomplete"
-                      : "Mark Complete"}
-                  </button>
-                  <button
-                    onClick={() => deleteTask(task.task_id)}
-                    className="bg-red-500 px-4 py-2 text-white font-bold hover:text-red-600 focus:outline-none rounded-md"
-                  >
-                    Delete
-                  </button>
-                </div>
-              </li>
+                task={task}
+                toggleComplete={toggleComplete}
+                deleteTask={deleteTask}
+              />
             ))}
           </ul>
         </>
