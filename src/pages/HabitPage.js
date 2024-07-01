@@ -85,7 +85,7 @@ const HabitPage = () => {
   }
 
   return (
-    <div className="container mx-auto mt-8 px-4">
+    <div className="min-h-screen container mx-auto mt-8 px-4">
       <h1 className="text-3xl font-semibold mb-4">My Habit Tracker</h1>
       <p className="mb-4">Habit: {habitDetails.habit_name}</p>
       <p className="mb-4">

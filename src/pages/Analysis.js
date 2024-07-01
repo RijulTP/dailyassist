@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react"
 import { GoogleGenerativeAI } from "@google/generative-ai"
 import ReactMarkdown from "react-markdown"
 
+import SpinnerComponent from "@/components/SpinnerComponent"
 const HOST_LOCAL = "http://localhost:8000"
 const HOST_PROD = "https://dailyassist-backend.vercel.app"
 
@@ -27,6 +28,9 @@ const DailyAnalysisPage = () => {
   const [taskSetId, setTaskSetId] = useState(null)
   const [surveyResults, setSurveyResults] = useState(null)
 
+  const [moodSpinner, setMoodSpinner] = useState(true)
+  const [adviceSpinner, setAdviceSpinner] = useState(true)
+
   useEffect(() => {
     if (taskSetId) {
       fetchTasks(taskSetId) // Fetches tasks after the task is set
@@ -42,8 +46,15 @@ const DailyAnalysisPage = () => {
   useEffect(() => {
     if (userMood) {
       fetchUserAdvice() // Fetches tasks after the task is set
+      setMoodSpinner(false)
     }
   }, [userMood])
+
+  useEffect(() => {
+    if (userMood) {
+      setAdviceSpinner(false)
+    }
+  }, [userAdvice])
 
   function humanizeHabitData(data) {
     let sentences = ""
@@ -247,13 +258,22 @@ const DailyAnalysisPage = () => {
       <div className="bg-gray-200 p-4 rounded-lg mb-4 w-full max-w-sm sm:max-w-md shadow-md">
         <p className="text-sm text-gray-700">
           <b>Current Mood: </b>
-          <span className="font-semibold text-blue-800">{userMood}</span>
+          {moodSpinner ? (
+            <SpinnerComponent /> // Replace this with your actual spinner component
+          ) : (
+            <span className="font-semibold text-blue-800">{userMood}</span>
+          )}
         </p>
       </div>
       <div className="bg-gray-200 p-4 rounded-lg w-full max-w-sm sm:max-w-md shadow-md">
         <p className="text-sm text-gray-700">
           <b>Word of advice: </b>
-          <ReactMarkdown className="message-text">{userAdvice}</ReactMarkdown>
+
+          {adviceSpinner ? (
+            <SpinnerComponent /> // Replace this with your actual spinner component
+          ) : (
+            <ReactMarkdown className="message-text">{userAdvice}</ReactMarkdown>
+          )}
         </p>
       </div>
     </div>

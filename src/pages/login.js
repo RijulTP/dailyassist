@@ -19,15 +19,14 @@ export default function Login() {
   const loggedInUser = useSelector((state) => state.auth.loggedInUser) // Access username from store
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn) // Access login status
   const userId = useSelector((state) => state.auth.userId) // Access user ID from store
-  const [message, setMessage] = useState('');
-  const [isError, setIsError] = useState(false);
+  const [message, setMessage] = useState("")
+  const [isError, setIsError] = useState(false)
   const router = useRouter()
-  if(isLoggedIn == true){
+  if (isLoggedIn == true) {
     router.push("/DAHomePage")
   }
 
   console.log("The redux values are", loggedInUser, isLoggedIn, userId)
-
 
   const handleLogin = async () => {
     try {
@@ -43,6 +42,8 @@ export default function Login() {
 
       if (data.success) {
         console.log("Login successful")
+        setMessage("Login successful")
+        setIsError(false)
         console.log("The username is", username)
         dispatch(setLoginStatus(true)) // Dispatch action to update login status
         dispatch(setLoggedInUser(username))
@@ -54,10 +55,17 @@ export default function Login() {
           "Login failed:",
           data.message || "Login failed (no message provided)"
         )
+        setMessage("Login Failed")
+        setIsError(true)
       }
     } catch (error) {
       console.error("An error occurred:", error)
+      setMessage("Login Failed")
+      setIsError(true)
     }
+    setTimeout(() => {
+      setMessage("")
+    }, 3000)
   }
 
   const handleRegister = async () => {
@@ -68,30 +76,29 @@ export default function Login() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ username, password, user_type: "user" }),
-      });
-      const data = await response.json(); // Parse the JSON response
+      })
+      const data = await response.json() // Parse the JSON response
       if (data.success) {
-        console.log("Registration successful");
-        setMessage("Registration successful");
-        setIsError(false);
+        console.log("Registration successful")
+        setMessage("Registration successful")
+        setIsError(false)
       } else {
         console.log(
           "Registration failed:",
           data.message || "Registration failed"
-        );
-        setMessage("Registration Failed");
-        setIsError(true);
+        )
+        setMessage("Registration Failed")
+        setIsError(true)
       }
     } catch (error) {
-      console.error("An error occurred:", error);
+      console.error("An error occurred:", error)
       setMessage("Registration Failed")
-      setIsError(true);
+      setIsError(true)
     }
     setTimeout(() => {
-      setMessage('');
-    }, 3000);
-  };
-  
+      setMessage("")
+    }, 3000)
+  }
 
   const [showPassword, setShowPassword] = useState(false)
   const passwordInputRef = useRef(null)
@@ -163,14 +170,15 @@ export default function Login() {
         {message && (
           <div
             className={`text-center px-4 py-3 mt-10 rounded ${
-              isError ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'
+              isError
+                ? "bg-red-100 text-red-700"
+                : "bg-green-100 text-green-700"
             }`}
           >
             {message}
           </div>
         )}
       </div>
-      
     </div>
   )
 }

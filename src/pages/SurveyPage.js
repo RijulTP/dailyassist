@@ -83,7 +83,7 @@ export default function SurveyPage() {
   }
 
   return (
-    <div className="p-8">
+    <div className=" min-h-screen p-8">
       <div className="mb-10 text-center">
         <h1 className="text-4xl font-bold mb-4">{surveyTitle}</h1>
         <h2 className="text-lg mb-8">{surveyDescription}</h2>

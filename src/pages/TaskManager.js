@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons"
+import SpinnerComponent from "@/components/SpinnerComponent"
 const USER_ID = 1
 
 const HOST_LOCAL = "http://localhost:8000"
@@ -116,7 +117,7 @@ const Task = ({ task, toggleComplete, deleteTask }) => {
         {task.task_name}
       </span>
       <div className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-2">
-        <Timer />
+        {task.task_status !== "completed" ? <Timer /> : null}
         <button
           onClick={() => toggleComplete(task.task_id, task.task_status)}
           className="w-full sm:w-auto px-4 py-2 bg-green-500 text-white font-bold rounded-md shadow hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500"
@@ -141,6 +142,10 @@ export default function TaskManager() {
   const [newTask, setNewTask] = useState("")
   const [selectedDate, setSelectedDate] = useState(new Date())
   const [isToday, setIsToday] = useState(true)
+
+  const [taskSpinner, setTaskSpinner] = useState(false)
+  const [taskModifySpinner, setTaskModifySpinner] = useState(false)
+
   useEffect(() => {
     let today = new Date()
     if (selectedDate.toDateString() === today.toDateString()) {
@@ -155,9 +160,16 @@ export default function TaskManager() {
 
   useEffect(() => {
     if (taskSetId) {
+      setTaskSpinner(true)
       fetchTasks(taskSetId, selectedDate)
     }
   }, [taskSetId])
+
+  useEffect(() => {
+    if (tasks) {
+      setTaskSpinner(false)
+    }
+  }, [tasks])
 
   const fetchTaskSetId = async (date) => {
     try {
@@ -209,6 +221,7 @@ export default function TaskManager() {
   }
 
   const addTask = async (e) => {
+    setTaskModifySpinner(true)
     e.preventDefault()
     if (!newTask.trim()) return
 
@@ -234,9 +247,11 @@ export default function TaskManager() {
     } catch (error) {
       console.error("Error adding task:", error)
     }
+    setTaskModifySpinner(false)
   }
 
   const deleteTask = async (taskId) => {
+    setTaskModifySpinner(true)
     try {
       const response = await fetch(`${HOST_PROD}/dailyassist/deletetask/`, {
         method: "POST",
@@ -254,9 +269,11 @@ export default function TaskManager() {
     } catch (error) {
       console.error("Error deleting task:", error)
     }
+    setTaskModifySpinner(false)
   }
 
   const toggleComplete = async (taskId, currentTaskStatus) => {
+    setTaskModifySpinner(true)
     try {
       const newTaskStatus =
         currentTaskStatus === "completed" ? "pending" : "completed"
@@ -290,6 +307,7 @@ export default function TaskManager() {
     } catch (error) {
       console.error("Error toggling task completion:", error)
     }
+    setTaskModifySpinner(false)
   }
 
   const formatDate = (date) => {
@@ -379,16 +397,26 @@ export default function TaskManager() {
               Add Task
             </button>
           </form>
-          <ul>
-            {tasks.map((task) => (
-              <Task
-                key={task.id}
-                task={task}
-                toggleComplete={toggleComplete}
-                deleteTask={deleteTask}
-              />
-            ))}
-          </ul>
+          {taskSpinner ? (
+            <SpinnerComponent />
+          ) : (
+            <ul>
+              {tasks.map((task) => (
+                <Task
+                  key={task.id}
+                  task={task}
+                  toggleComplete={toggleComplete}
+                  deleteTask={deleteTask}
+                />
+              ))}
+            </ul>
+          )}
+
+          {taskModifySpinner ? (
+            <SpinnerComponent />
+          ) : (
+            null
+          )}
         </>
       ) : (
         <div className="text-center text-2xl text-gray-500 py-12">
