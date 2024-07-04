@@ -2,9 +2,11 @@ import React, { useEffect, useState } from "react"
 import SurveyQuestion from "./SurveyQuestion"
 import { useSearchParams } from "next/navigation"
 import { useRouter } from "next/router"
-
+import { useSelector } from "react-redux"
+import SpinnerComponent from "@/components/SpinnerComponent"
 const HOST_LOCAL = "http://localhost:8000"
 const HOST_PROD = "https://dailyassist-backend.vercel.app"
+// const HOST_PROD = "http://localhost:8000"
 
 const REQUIRED = "*required"
 
@@ -17,7 +19,9 @@ export default function SurveyPage() {
   const searchParams = useSearchParams()
   const survey_id = searchParams.get("survey_id")
   const router = useRouter()
+  const user_id = useSelector((state) => state.auth.userId)
 
+  const [surveySpinner, setSurveySpinner] = useState(false)
   useEffect(() => {
     console.log("The answers are", answers)
   }, [answers])
@@ -25,27 +29,40 @@ export default function SurveyPage() {
   const questionsPerPage = 1 // Change this value to adjust number of questions per page
 
   useEffect(() => {
-    if (survey_id) {
-      // Fetch survey details from the API
-      fetch(`${HOST_PROD}/dailyassist/view_survey_details/`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ survey_id: survey_id }),
-      })
-        .then((response) => response.json())
-        .then((data) => {
+    const fetchData = async () => {
+      if (survey_id) {
+        setSurveySpinner(true)
+
+        try {
+          const response = await fetch(
+            `${HOST_PROD}/dailyassist/view_survey_details/`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ survey_id: survey_id }),
+            }
+          )
+
+          const data = await response.json()
+
           if (data && data.survey_details && data.survey_details.questions) {
             setSurveyTitle(data.survey_details.survey_name)
             setSurveyDescription(data.survey_details.survey_description)
             setSurveyQuestions(data.survey_details.questions)
           }
-        })
-        .catch((error) =>
+        } catch (error) {
           console.error("Error fetching survey details:", error)
-        )
+        } finally {
+          setSurveySpinner(false)
+        }
+      }
     }
+
+    fetchData() // Call the function within useEffect
+
+    // Dependency array (remains the same)
   }, [survey_id])
 
   const nextPage = () => {
@@ -68,7 +85,7 @@ export default function SurveyPage() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        user_id: 1,
+        user_id: user_id,
         survey_id: survey_id,
         answer_json: answers,
       }),
@@ -88,6 +105,7 @@ export default function SurveyPage() {
         <h1 className="text-4xl font-bold mb-4">{surveyTitle}</h1>
         <h2 className="text-lg mb-8">{surveyDescription}</h2>
       </div>
+      {surveySpinner ? <SpinnerComponent /> : null}
       <div style={{ height: "600px" }}>
         {surveyQuestions
           .slice(
@@ -116,6 +134,7 @@ export default function SurveyPage() {
             </div>
           ))}
       </div>
+
       <div className="text-center">
         {currentPage > 0 && (
           <button

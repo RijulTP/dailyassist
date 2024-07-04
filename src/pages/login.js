@@ -2,10 +2,11 @@
 import { useState, useRef, useEffect } from "react"
 import { useDispatch } from "react-redux"
 import { useRouter } from "next/navigation"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+  import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons"
 import { setLoggedInUser, setUserId, setLoginStatus } from "../redux/authSlice" // Import actions
 import { useSelector } from "react-redux"
+import SpinnerComponent from "@/components/SpinnerComponent"
 
 const HOST_LOCAL = "http://localhost:8000"
 const HOST_PROD = "https://dailyassist-backend.vercel.app"
@@ -21,6 +22,7 @@ export default function Login() {
   const userId = useSelector((state) => state.auth.userId) // Access user ID from store
   const [message, setMessage] = useState("")
   const [isError, setIsError] = useState(false)
+  const [authLoader,setAuthLoader] = useState(false)
   const router = useRouter()
   if (isLoggedIn == true) {
     router.push("/DAHomePage")
@@ -29,6 +31,7 @@ export default function Login() {
   console.log("The redux values are", loggedInUser, isLoggedIn, userId)
 
   const handleLogin = async () => {
+    setAuthLoader(true)
     try {
       const response = await fetch(`${HOST_PROD}/dailyassist/login`, {
         method: "POST",
@@ -45,8 +48,10 @@ export default function Login() {
         setMessage("Login successful")
         setIsError(false)
         console.log("The username is", username)
+        const userId = data.user_id;
         dispatch(setLoginStatus(true)) // Dispatch action to update login status
         dispatch(setLoggedInUser(username))
+        dispatch(setUserId(userId))
 
         // dispatch(setUserId(data.userId)) // Set user ID from response (assuming response has userId)
         router.push("/DAHomePage")
@@ -63,12 +68,14 @@ export default function Login() {
       setMessage("Login Failed")
       setIsError(true)
     }
+    setAuthLoader(false)
     setTimeout(() => {
       setMessage("")
     }, 3000)
   }
 
   const handleRegister = async () => {
+    setAuthLoader(true)
     try {
       const response = await fetch(`${HOST_PROD}/dailyassist/add_user`, {
         method: "POST",
@@ -95,9 +102,11 @@ export default function Login() {
       setMessage("Registration Failed")
       setIsError(true)
     }
+    setAuthLoader(false)
     setTimeout(() => {
       setMessage("")
     }, 3000)
+
   }
 
   const [showPassword, setShowPassword] = useState(false)
@@ -178,6 +187,11 @@ export default function Login() {
             {message}
           </div>
         )}
+        {authLoader ? (
+            <SpinnerComponent />
+          ) : (
+            null
+          )}
       </div>
     </div>
   )

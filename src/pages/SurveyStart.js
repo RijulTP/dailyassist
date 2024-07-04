@@ -1,19 +1,31 @@
 import React, { useState, useEffect } from "react"
 import Link from "next/link"
-
+import SpinnerComponent from "@/components/SpinnerComponent"
 const HOST_LOCAL = "http://localhost:8000"
 const HOST_PROD = "https://dailyassist-backend.vercel.app"
 
 const SurveyStart = () => {
   const [surveys, setSurveys] = useState([])
+  const [surveySpinner, setSurveySpinner] = useState(false)
 
   useEffect(() => {
-    fetch(`${HOST_PROD}/dailyassist/view_survey_list/`)
-      .then((response) => response.json())
-      .then((data) => {
+    const fetchData = async () => {
+      setSurveySpinner(true)
+
+      try {
+        const response = await fetch(
+          `${HOST_PROD}/dailyassist/view_survey_list/`
+        )
+        const data = await response.json()
         setSurveys(data.surveys)
-      })
-      .catch((error) => console.error("Error fetching survey list:", error))
+      } catch (error) {
+        console.error("Error fetching survey list:", error)
+      } finally {
+        setSurveySpinner(false)
+      }
+    }
+
+    fetchData() // Call the function within useEffect
   }, [])
 
   return (
@@ -48,6 +60,7 @@ const SurveyStart = () => {
             </div>
           ))}
         </div>
+        {surveySpinner ? <SpinnerComponent /> : null}
       </div>
     </div>
   )

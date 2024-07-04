@@ -2,11 +2,10 @@ import React, { useState, useEffect } from "react"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faCheck, faClock } from "@fortawesome/free-solid-svg-icons"
 import { useSearchParams } from "next/navigation"
+import { useSelector } from "react-redux"
 
 const HOST_LOCAL = "http://localhost:8000"
 const HOST_PROD = "https://dailyassist-backend.vercel.app"
-
-const user_id = 1
 
 const HabitPage = () => {
   const searchParams = useSearchParams()
@@ -16,6 +15,7 @@ const HabitPage = () => {
   const [selectedDay, setSelectedDay] = useState(null)
   const [currentDay, setCurrentDay] = useState(1)
   const [completedDays, setCompletedDays] = useState([])
+  const user_id = useSelector((state) => state.auth.userId)
 
   useEffect(() => {
     if (habit_id) {

@@ -15,6 +15,7 @@ export const authSlice = createSlice({
       state.loggedInUser = action.payload;
     },
     setUserId: (state, action) => {
+      console.log("Changing the setUserId Redux state",action.payload)
       state.userId = action.payload;
     },
     setLoginStatus: (state, action) => {

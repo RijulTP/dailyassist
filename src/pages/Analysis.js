@@ -3,10 +3,11 @@ import { GoogleGenerativeAI } from "@google/generative-ai"
 import ReactMarkdown from "react-markdown"
 
 import SpinnerComponent from "@/components/SpinnerComponent"
+import { useSelector } from "react-redux"
 const HOST_LOCAL = "http://localhost:8000"
 const HOST_PROD = "https://dailyassist-backend.vercel.app"
+// const HOST_PROD = "http://localhost:8000"
 
-const USER_ID = 1
 const API_KEY = "AIzaSyBmrOh1cZRZIEtznQSsUTqY13isfsfXCCA"
 const genAI = new GoogleGenerativeAI(API_KEY)
 const model = genAI.getGenerativeModel({ model: "gemini-pro" })
@@ -30,6 +31,7 @@ const DailyAnalysisPage = () => {
 
   const [moodSpinner, setMoodSpinner] = useState(true)
   const [adviceSpinner, setAdviceSpinner] = useState(true)
+  const user_id = useSelector((state) => state.auth.userId)
 
   useEffect(() => {
     if (taskSetId) {
@@ -95,7 +97,7 @@ const DailyAnalysisPage = () => {
           },
           body: JSON.stringify({
             date_of_task: getCurrentDate(), // Dynamically fetch today's date
-            user_id: USER_ID, // Hardcoded user ID
+            user_id: user_id, // Hardcoded user ID
           }),
         }
       )
@@ -135,7 +137,7 @@ const DailyAnalysisPage = () => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ user_id: 1 }), // Adjust user_id as needed
+          body: JSON.stringify({ user_id: user_id }), // Adjust user_id as needed
         }
       )
       const data = await response.json()
@@ -157,7 +159,7 @@ const DailyAnalysisPage = () => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ user_id: 1 }), // Adjust user_id as needed
+          body: JSON.stringify({ user_id: user_id }), // Adjust user_id as needed
         }
       )
       const data = await response.json()

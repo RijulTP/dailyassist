@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faExclamationCircle } from "@fortawesome/free-solid-svg-icons"
 import SpinnerComponent from "@/components/SpinnerComponent"
-const USER_ID = 1
+import { useSelector } from "react-redux"
 
 const HOST_LOCAL = "http://localhost:8000"
 const HOST_PROD = "https://dailyassist-backend.vercel.app"
@@ -145,6 +145,7 @@ export default function TaskManager() {
 
   const [taskSpinner, setTaskSpinner] = useState(false)
   const [taskModifySpinner, setTaskModifySpinner] = useState(false)
+  const user_id = useSelector((state) => state.auth.userId)
 
   useEffect(() => {
     let today = new Date()
@@ -182,7 +183,7 @@ export default function TaskManager() {
           },
           body: JSON.stringify({
             date_of_task: formatDate(date),
-            user_id: USER_ID,
+            user_id: user_id,
           }),
         }
       )
@@ -233,7 +234,7 @@ export default function TaskManager() {
         },
         body: JSON.stringify({
           date_of_task: formatDate(selectedDate),
-          user_id: USER_ID,
+          user_id: user_id,
           task_name: newTask,
           task_status: "Pending",
         }),

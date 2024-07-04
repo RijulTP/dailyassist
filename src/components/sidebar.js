@@ -24,16 +24,24 @@ import {
 } from "@fortawesome/free-solid-svg-icons"
 import { useRouter } from "next/router"
 import { useSelector } from "react-redux"
+import { useDispatch } from "react-redux"
+import { setLoginStatus } from "@/redux/authSlice"
 
 export default function MainSidebar({ children }) {
   const router = useRouter()
   const [collapsed, setCollapsed] = React.useState(false)
   const loggedInUser = useSelector((state) => state.auth.loggedInUser)
+  const user_id = useSelector((state) => state.auth.userId)
   useEffect(() => {
     console.log("The loggedin user value at sidebar is", loggedInUser)
   }, [loggedInUser])
+  const dispatch = useDispatch()
 
-  
+  function logoutUser() {
+    console.log("User logged out")
+    dispatch(setLoginStatus(false))
+    router.push("/login")
+  }
 
   return (
     <div style={{ display: "flex", width: "250px" }}>
@@ -94,16 +102,42 @@ export default function MainSidebar({ children }) {
             {" "}
             Life Navigator Bot
           </MenuItem>
-          <MenuItem
-            icon={<FontAwesomeIcon icon={faLock} />}
-            onClick={() => router.push("/AdminPage")}
+          {user_id === 1 && (
+            <MenuItem
+              icon={<FontAwesomeIcon icon={faLock} />}
+              onClick={() => router.push("/AdminPage")}
+            >
+              {" "}
+              Admin Page
+            </MenuItem>
+          )}
+        </Menu>
+        <Menu
+          menuItemStyles={{
+            button: {
+              color: "#ffffff",
+              "&:hover": {
+                backgroundColor: "#181129",
+              },
+            },
+          }}
+        >
+          <SubMenu
+            label={loggedInUser}
+            icon={<FontAwesomeIcon icon={faUser} />}
+            menuItemStyles={{
+              button: {
+                color: "#ffffff",
+                "&:hover": {
+                  backgroundColor: "#181129",
+                },
+              },
+            }}
           >
-            {" "}
-            Admin Page
-          </MenuItem>
-          <MenuItem className="mt-auto" icon={<FontAwesomeIcon icon={faUser} />}>
-            {loggedInUser}
-          </MenuItem>
+            <MenuItem style={{ backgroundColor: "brown" }} onClick={logoutUser}>
+              Logout
+            </MenuItem>
+          </SubMenu>
         </Menu>
       </Sidebar>
     </div>
